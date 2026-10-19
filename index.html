@@ -35,7 +35,6 @@
       </div>
       
       <div class="flex items-center gap-2">
-        <!-- Fitur Pilih Musik Lokal -->
         <button onclick="document.getElementById('audioInput').click()" id="btnMusic" class="bg-[#0f443b] hover:bg-[#0a3029] border border-[#2b7a6c] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow transition flex items-center gap-2">
           <span>🎵 Pilih Musik Alam</span>
         </button>
@@ -126,44 +125,62 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <!-- Grafik Donat -->
+      <!-- Area Grafik Visual 2 Kolom (Kelas & Status) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Grafik Donat (Kelas Tanah) -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
           <div class="flex justify-between items-center mb-4">
             <h3 class="font-bold text-slate-800 text-sm">Distribusi Kelas Tanah</h3>
             <span class="text-[10px] bg-slate-100 px-2 py-1 rounded font-semibold text-slate-500">Berdasarkan Luas</span>
           </div>
-          <div class="relative h-56 w-full flex justify-center items-center">
+          <div class="relative h-52 w-full flex justify-center items-center">
             <canvas id="chartDonut"></canvas>
             <div id="donutEmpty" class="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-400 hidden">Belum ada data</div>
           </div>
           <div class="grid grid-cols-3 gap-2 mt-6">
-            <div class="bg-emerald-50 text-center p-2.5 rounded-lg border border-emerald-100">
+            <div class="bg-emerald-50 text-center p-2 rounded-lg border border-emerald-100">
               <div id="pctProd" class="text-sm font-extrabold text-emerald-700">0%</div>
               <div class="text-[10px] font-semibold text-emerald-600/80 mt-0.5">Produktif</div>
             </div>
-            <div class="bg-amber-50 text-center p-2.5 rounded-lg border border-amber-100">
+            <div class="bg-amber-50 text-center p-2 rounded-lg border border-amber-100">
               <div id="pctNonProd" class="text-sm font-extrabold text-amber-700">0%</div>
               <div class="text-[10px] font-semibold text-amber-600/80 mt-0.5">Tidak Prod.</div>
             </div>
-            <div class="bg-blue-50 text-center p-2.5 rounded-lg border border-blue-100">
+            <div class="bg-blue-50 text-center p-2 rounded-lg border border-blue-100">
               <div id="pctPem" class="text-sm font-extrabold text-blue-700">0%</div>
               <div class="text-[10px] font-semibold text-blue-600/80 mt-0.5">Pemukiman</div>
             </div>
           </div>
         </div>
 
-        <!-- Grafik Bar -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:col-span-2">
+        <!-- Grafik Pie (Status Kepemilikan) -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-slate-800 text-sm">Status Kepemilikan</h3>
+            <span class="text-[10px] bg-slate-100 px-2 py-1 rounded font-semibold text-slate-500">Berdasarkan Jumlah Bidang</span>
+          </div>
+          <div class="relative h-52 w-full flex justify-center items-center">
+            <canvas id="chartStatus"></canvas>
+            <div id="statusEmpty" class="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-400 hidden">Belum ada data</div>
+          </div>
+          <div class="text-center mt-6">
+            <p class="text-[11px] text-slate-500 font-medium">Data menampilkan komposisi legalitas / hak penguasaan tanah yang ada di seluruh dusun.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grafik Bar -->
+      <div class="grid grid-cols-1 gap-4">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
           <div class="flex justify-between items-center mb-4">
             <div>
               <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                 Perbandingan Luas per Blok / Kampung
               </h3>
-              <p class="text-[10px] text-slate-500 mt-0.5">Akumulasi luas tanah untuk 5 blok terbesar</p>
+              <p class="text-[10px] text-slate-500 mt-0.5">Akumulasi luas tanah untuk 5 blok/kampung terbesar</p>
             </div>
-            <button onclick="switchTab('tab-rekap')" class="text-xs text-emerald-600 font-bold hover:text-emerald-800 transition flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg">
+            <button onclick="switchTab('tab-rekap')" class="text-xs text-emerald-600 font-bold hover:text-emerald-800 transition flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
               Lihat Detail <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </button>
           </div>
@@ -203,10 +220,9 @@
 
     <!-- TAB 3: Data Bidang Tanah -->
     <div id="tab-data" class="hidden animate-in fade-in duration-300 space-y-4">
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
         
-        <!-- Filter dan Tampilkan Jumlah Baris -->
-        <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+        <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto">
           <!-- Tampilkan Halaman -->
           <div class="flex items-center gap-2 border-r border-slate-300 pr-3">
             <label class="text-xs text-slate-700 font-bold">Tampilkan:</label>
@@ -233,7 +249,7 @@
             <option value="Pemukiman">Pemukiman</option>
           </select>
 
-          <!-- Filter Status Kepemilikan (BARU) -->
+          <!-- Filter Status Kepemilikan -->
           <select id="filterStatus" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
             <option value="">Semua Status</option>
             <option value="Tanah Milik (Pribadi)">Tanah Milik</option>
@@ -245,7 +261,7 @@
         </div>
         
         <!-- Info Halaman & Lompat Halaman -->
-        <div class="flex items-center gap-3 w-full lg:w-auto">
+        <div class="flex items-center gap-3 w-full xl:w-auto">
           <div class="text-xs text-slate-600 font-bold bg-slate-100 px-3 py-2 rounded-lg border border-slate-200 whitespace-nowrap" id="tableInfo">0 data</div>
           
           <div class="flex items-center gap-1 bg-emerald-50 px-2 py-1.5 rounded-lg border border-emerald-200">
@@ -306,17 +322,17 @@
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-xl border border-blue-200 shadow-sm flex flex-col md:flex-row gap-6 items-center justify-between">
+      <div class="bg-white p-6 rounded-xl border border-blue-200 shadow-sm flex flex-col md:flex-row gap-6 items-center justify-between bg-blue-50/30">
         <div class="max-w-xl">
           <h3 class="text-base font-bold text-blue-800 flex items-center gap-2">
             <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
             Sistem Pindah Komputer (Backup JSON)
           </h3>
           <p class="text-xs text-slate-500 mt-2 leading-relaxed font-medium">
-            Data tersimpan aman di browser Anda saat ini. Jika ingin memindahkannya ke laptop lain:<br>
-            1. Klik <b>Backup Database</b> (File .json terunduh).<br>
-            2. Pindahkan file tersebut ke flashdisk.<br>
-            3. Di komputer tujuan, klik <b>Restore Database</b> dan masukkan file tersebut.
+            Ingin memindahkan data dari laptop A ke laptop B? <br>
+            1. Klik <b>Backup Database</b> (File .json terunduh). Pindahkan file ke flashdisk.<br>
+            2. Di komputer tujuan, klik <b>Restore Database</b>. <br><br>
+            <span class="text-blue-700 font-bold bg-blue-100 px-2 py-0.5 rounded">Sistem Cerdas:</span> Saat melakukan Restore, Anda akan diberi pilihan untuk <b>MENGGABUNGKAN</b> data baru dengan data lama, atau <b>MENIMPA</b> (menghapus) data lama.
           </p>
         </div>
         <div class="flex flex-col gap-3 min-w-[200px]">
@@ -383,7 +399,6 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-          <!-- Opsi Baru: Status Kepemilikan -->
           <div class="col-span-2 md:col-span-1">
             <label class="block font-bold text-slate-700 mb-1.5">Status Kepemilikan <span class="text-rose-500">*</span></label>
             <select id="inputStatus" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition bg-white font-bold text-slate-700">
@@ -421,7 +436,7 @@
     // ==========================================
     // 1. STATE & KONFIGURASI DATABASE
     // ==========================================
-    const STORAGE_KEY = 'siperta_gunungsari_final_v2';
+    const STORAGE_KEY = 'siperta_gunungsari_final_v3';
     const LOGO_KEY = 'siperta_logo_saved';
     
     let tanahList = [];
@@ -429,6 +444,7 @@
     let rowsPerPage = 10;
     let myDonutChart = null;
     let myBarChart = null;
+    let myStatusChart = null; // Chart Baru
     let globalRekapBlok = {}; 
 
     // ==========================================
@@ -478,7 +494,7 @@
       const music = document.getElementById('bgMusic');
       const btn = document.getElementById('btnMusic');
       
-      if(!music.src || music.src.endsWith('siperta.html')) {
+      if(!music.src || music.src.endsWith('siperta.html') || music.src === window.location.href) {
         document.getElementById('audioInput').click();
         return;
       }
@@ -618,6 +634,7 @@
     // 5. CHART.JS VISUALIZATION
     // ==========================================
     function initCharts() {
+      // Donut Chart: Kelas Tanah
       const ctxDonut = document.getElementById('chartDonut').getContext('2d');
       myDonutChart = new Chart(ctxDonut, {
         type: 'doughnut',
@@ -625,6 +642,21 @@
         options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false } } }
       });
 
+      // Pie Chart: Status Kepemilikan (BARU)
+      const ctxStatus = document.getElementById('chartStatus').getContext('2d');
+      myStatusChart = new Chart(ctxStatus, {
+        type: 'pie',
+        data: { 
+          labels: ['Tanah Milik', 'Tanah Desa', 'Bengkok', 'Wakaf', 'Negara'], 
+          datasets: [{ data: [0,0,0,0,0], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#64748b'], borderWidth: 2 }] 
+        },
+        options: { 
+          responsive: true, maintainAspectRatio: false, 
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size: 11, weight:'bold'} } } } 
+        }
+      });
+
+      // Bar Chart: Rekap Blok
       const ctxBar = document.getElementById('chartBar').getContext('2d');
       myBarChart = new Chart(ctxBar, {
         type: 'bar',
@@ -634,13 +666,27 @@
     }
 
     function updateCharts() {
+      // Update Donut Kelas
       let lProd = 0, lNon = 0, lPem = 0;
+      // Update Pie Status (Jumlah Bidang)
+      let sMilik = 0, sDesa = 0, sBengkok = 0, sWakaf = 0, sNegara = 0;
+
       tanahList.forEach(t => {
+        // Kelas
         if(t.kelas === 'Produktif') lProd += t.luas;
         else if(t.kelas === 'Tidak Produktif') lNon += t.luas;
         else lPem += t.luas;
+
+        // Status
+        const status = t.status || 'Tanah Milik (Pribadi)';
+        if(status.includes('Milik')) sMilik++;
+        else if(status.includes('Desa')) sDesa++;
+        else if(status.includes('Bengkok')) sBengkok++;
+        else if(status.includes('Wakaf')) sWakaf++;
+        else sNegara++;
       });
 
+      // Render Kelas Chart
       if(lProd === 0 && lNon === 0 && lPem === 0) {
         document.getElementById('chartDonut').style.display = 'none';
         document.getElementById('donutEmpty').classList.remove('hidden');
@@ -651,6 +697,18 @@
         myDonutChart.update();
       }
 
+      // Render Status Chart
+      if(sMilik === 0 && sDesa === 0 && sBengkok === 0 && sWakaf === 0 && sNegara === 0) {
+        document.getElementById('chartStatus').style.display = 'none';
+        document.getElementById('statusEmpty').classList.remove('hidden');
+      } else {
+        document.getElementById('chartStatus').style.display = 'block';
+        document.getElementById('statusEmpty').classList.add('hidden');
+        myStatusChart.data.datasets[0].data = [sMilik, sDesa, sBengkok, sWakaf, sNegara];
+        myStatusChart.update();
+      }
+
+      // Render Bar Blok Chart
       const bloks = Object.keys(globalRekapBlok).map(key => ({ name: key, data: globalRekapBlok[key] })).sort((a,b) => b.data.total - a.data.total).slice(0, 5);
       if(bloks.length === 0) {
         document.getElementById('chartBar').style.display = 'none';
@@ -690,7 +748,7 @@
         const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
         const matchBlok = !filterBlok || item.blok === filterBlok;
         const matchKelas = !filterKelas || item.kelas === filterKelas;
-        const matchStatus = !filterStatus || item.status === filterStatus;
+        const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
         return matchSearch && matchBlok && matchKelas && matchStatus;
       });
 
@@ -713,7 +771,7 @@
       const search = document.getElementById('searchInput').value.toLowerCase().trim();
       const filterBlok = document.getElementById('filterBlok').value;
       const filterKelas = document.getElementById('filterKelas').value;
-      const filterStatus = document.getElementById('filterStatus').value; // Baru
+      const filterStatus = document.getElementById('filterStatus').value;
 
       const filtered = tanahList.filter(item => {
         const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
@@ -745,7 +803,6 @@
           if (item.kelas === 'Tidak Produktif') badgeColor = "bg-amber-100 text-amber-800 border-amber-200";
           if (item.kelas === 'Pemukiman') badgeColor = "bg-blue-100 text-blue-800 border-blue-200";
 
-          // Pastikan data lama yang tidak punya status ter-default ke Tanah Milik
           const statusTampil = item.status || 'Tanah Milik (Pribadi)';
 
           tr.innerHTML = `
@@ -868,7 +925,7 @@
       const luas = parseFloat(document.getElementById('inputLuas').value) || 0;
       const alamat = document.getElementById('inputAlamat').value.trim();
       const kelas = document.getElementById('inputKelas').value;
-      const status = document.getElementById('inputStatus').value; // Baru
+      const status = document.getElementById('inputStatus').value;
 
       if (id) {
         const target = tanahList.find(item => item.id == id);
@@ -891,7 +948,7 @@
       document.getElementById('inputLuas').value = target.luas;
       document.getElementById('inputAlamat').value = target.alamat || '';
       document.getElementById('inputKelas').value = target.kelas;
-      document.getElementById('inputStatus').value = target.status || 'Tanah Milik (Pribadi)'; // Baru
+      document.getElementById('inputStatus').value = target.status || 'Tanah Milik (Pribadi)';
       openModal(true);
     }
 
@@ -912,7 +969,7 @@
     }
 
     // ==========================================
-    // 8. IMPORT, EXPORT, BACKUP RESTORE
+    // 8. IMPORT, EXPORT, BACKUP RESTORE (PILIH GABUNG/TIMPA)
     // ==========================================
     function importExcel(e) {
       const file = e.target.files[0];
@@ -939,7 +996,7 @@
                 nama: nama, luas: cleanLuas,
                 blok: "Gunungsari (Import)", alamat: "-",
                 kelas: cleanLuas > 1000 ? "Produktif" : (cleanLuas < 300 ? "Pemukiman" : "Tidak Produktif"),
-                status: "Tanah Milik (Pribadi)", // Status Default untuk Data Import
+                status: "Tanah Milik (Pribadi)",
                 nik: ""
               });
               importedCount++;
@@ -961,7 +1018,7 @@
         "NIK": t.nik,
         "Kampung/Blok": t.blok, 
         "Alamat Tanah": t.alamat,
-        "Status Kepemilikan": t.status || "Tanah Milik (Pribadi)", // Baru
+        "Status Kepemilikan": t.status || "Tanah Milik (Pribadi)",
         "Kelas Tanah": t.kelas, 
         "Luas (m2)": t.luas
       }));
@@ -988,8 +1045,27 @@
         try {
           const imported = JSON.parse(evt.target.result);
           if(Array.isArray(imported)) {
-            tanahList = imported; autoSave(); renderAll(); switchTab('tab-ringkasan');
-            alert("Pemulihan Data (Restore) Berhasil Dilakukan!");
+            
+            // FITUR BARU: Konfirmasi Gabung atau Timpa
+            const mergeConfirm = confirm(
+              "PENTING: Pengaturan Pemulihan Data!\n\n" +
+              "▶ Klik [OK] untuk MENGGABUNGKAN data backup ini dengan data yang sudah ada.\n" +
+              "▶ Klik [Cancel] untuk MENIMPA (menghapus data lama & mengganti dengan data backup ini)."
+            );
+
+            if (mergeConfirm) {
+              let currentMaxId = tanahList.length > 0 ? Math.max(...tanahList.map(t => t.id || 0)) : new Date().getTime();
+              imported.forEach((item, index) => {
+                item.id = currentMaxId + index + 1; // Cegah ID bentrok
+                tanahList.push(item);
+              });
+              alert("Data berhasil DIGABUNGKAN secara aman!");
+            } else {
+              tanahList = imported;
+              alert("Data berhasil DIPULIHKAN (Data lama telah ditimpa)!");
+            }
+
+            autoSave(); renderAll(); switchTab('tab-ringkasan');
           } else alert("Format file JSON tidak valid.");
         } catch(err) { alert("Gagal membaca file Backup JSON."); }
       };
