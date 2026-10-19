@@ -10,26 +10,18 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
 
-  <!-- Audio Player Tersembunyi -->
   <audio id="bgMusic" loop></audio>
 
-  <!-- Header Navigasi -->
   <header class="bg-[#1a5f53] text-white shadow-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
       <div class="flex items-center gap-3">
-        <!-- Fitur Pilih Logo Lokal -->
-        <div onclick="document.getElementById('logoInput').click()" title="Klik untuk mengubah logo" class="bg-white p-1.5 rounded-lg shadow-sm cursor-pointer hover:bg-slate-200 transition">
-          <img id="appLogo" src="Seal_of_Tasikmalaya_Regency.svg.jpg" 
-               alt="Logo" 
-               class="h-10 w-10 object-contain"
-               onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%231a5f53\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'/></svg>';">
+        <!-- Logo Paten Baru -->
+        <div class="bg-white p-1.5 rounded-lg shadow-sm">
+          <img src="data:image/jpeg;base64,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" alt="Logo Kab Tasikmalaya" class="h-10 w-10 object-contain">
         </div>
-        <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="changeLogo(event)">
         
         <div>
-          <h1 class="text-xl font-bold tracking-wide flex items-center gap-2">
-            SIPERTA GUNUNGSARI
-          </h1>
+          <h1 class="text-xl font-bold tracking-wide flex items-center gap-2">SIPERTA GUNUNGSARI</h1>
           <p class="text-xs text-emerald-100 font-medium" id="clockDisplay">Memuat waktu...</p>
         </div>
       </div>
@@ -50,7 +42,6 @@
       </div>
     </div>
     
-    <!-- Tab Navigasi Menu -->
     <div class="max-w-7xl mx-auto px-4 flex gap-6 text-sm font-semibold text-emerald-100/70 overflow-x-auto">
       <button onclick="switchTab('tab-ringkasan')" id="nav-ringkasan" class="py-3 text-white border-b-[3px] border-emerald-400 transition whitespace-nowrap">Ringkasan & Analisis</button>
       <button onclick="switchTab('tab-rekap')" id="nav-rekap" class="py-3 hover:text-white transition whitespace-nowrap">Rekap per Kampung/Blok</button>
@@ -60,210 +51,89 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 py-6 flex-grow">
-
     <!-- TAB 1: Ringkasan & Analisis -->
     <div id="tab-ringkasan" class="space-y-6 block animate-in fade-in duration-300">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Kartu Total -->
         <div class="bg-white p-5 rounded-xl border-t-4 border-slate-200 shadow-sm flex justify-between items-start">
-          <div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Luas Tanah</span>
-            <div class="flex items-baseline gap-1 mt-1">
-              <span id="statTotalLuas" class="text-3xl font-extrabold text-slate-800">0</span>
-              <span class="text-base font-bold text-slate-800">m²</span>
-            </div>
-            <div id="statTotalSub" class="text-xs text-emerald-600 font-bold mt-1">≈ 0 Hektar (0 Bidang)</div>
-          </div>
-          <div class="bg-emerald-50 p-2.5 rounded-xl text-emerald-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16v16H4z M9 4v16 M15 4v16 M4 9h16 M4 15h16"/></svg>
-          </div>
+          <div><span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Luas Tanah</span><div class="flex items-baseline gap-1 mt-1"><span id="statTotalLuas" class="text-3xl font-extrabold text-slate-800">0</span><span class="text-base font-bold text-slate-800">m²</span></div><div id="statTotalSub" class="text-xs text-emerald-600 font-bold mt-1">≈ 0 Hektar (0 Bidang)</div></div>
+          <div class="bg-emerald-50 p-2.5 rounded-xl text-emerald-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16v16H4z M9 4v16 M15 4v16 M4 9h16 M4 15h16"/></svg></div>
         </div>
-
-        <!-- Kartu Produktif -->
         <div class="bg-white p-5 rounded-xl border-t-4 border-emerald-400 shadow-sm flex justify-between items-start">
-          <div>
-            <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Tanah Produktif</span>
-            <div class="flex items-baseline gap-1 mt-1">
-              <span id="statProd" class="text-3xl font-extrabold text-emerald-700">0</span>
-              <span class="text-base font-bold text-emerald-700">m²</span>
-            </div>
-            <div id="statProdSub" class="text-xs text-slate-500 mt-1 font-medium">0 bidang (0%)</div>
-          </div>
-          <div class="bg-emerald-50 p-2.5 rounded-xl text-emerald-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
-          </div>
+          <div><span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Tanah Produktif</span><div class="flex items-baseline gap-1 mt-1"><span id="statProd" class="text-3xl font-extrabold text-emerald-700">0</span><span class="text-base font-bold text-emerald-700">m²</span></div><div id="statProdSub" class="text-xs text-slate-500 mt-1 font-medium">0 bidang (0%)</div></div>
+          <div class="bg-emerald-50 p-2.5 rounded-xl text-emerald-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg></div>
         </div>
-
-        <!-- Kartu Tidak Produktif -->
         <div class="bg-white p-5 rounded-xl border-t-4 border-amber-400 shadow-sm flex justify-between items-start">
-          <div>
-            <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span> Tidak Produktif</span>
-            <div class="flex items-baseline gap-1 mt-1">
-              <span id="statNonProd" class="text-3xl font-extrabold text-amber-700">0</span>
-              <span class="text-base font-bold text-amber-700">m²</span>
-            </div>
-            <div id="statNonProdSub" class="text-xs text-slate-500 mt-1 font-medium">0 bidang (0%)</div>
-          </div>
-          <div class="bg-amber-50 p-2.5 rounded-xl text-amber-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          </div>
+          <div><span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span> Tidak Produktif</span><div class="flex items-baseline gap-1 mt-1"><span id="statNonProd" class="text-3xl font-extrabold text-amber-700">0</span><span class="text-base font-bold text-amber-700">m²</span></div><div id="statNonProdSub" class="text-xs text-slate-500 mt-1 font-medium">0 bidang (0%)</div></div>
+          <div class="bg-amber-50 p-2.5 rounded-xl text-amber-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
         </div>
-
-        <!-- Kartu Pemukiman -->
         <div class="bg-white p-5 rounded-xl border-t-4 border-blue-400 shadow-sm flex justify-between items-start">
-          <div>
-            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Tanah Pemukiman</span>
-            <div class="flex items-baseline gap-1 mt-1">
-              <span id="statPem" class="text-3xl font-extrabold text-blue-700">0</span>
-              <span class="text-base font-bold text-blue-700">m²</span>
-            </div>
-            <div id="statPemSub" class="text-xs text-slate-500 mt-1 font-medium">0 bidang (0%)</div>
-          </div>
-          <div class="bg-blue-50 p-2.5 rounded-xl text-blue-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-          </div>
+          <div><span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Tanah Pemukiman</span><div class="flex items-baseline gap-1 mt-1"><span id="statPem" class="text-3xl font-extrabold text-blue-700">0</span><span class="text-base font-bold text-blue-700">m²</span></div><div id="statPemSub" class="text-xs text-slate-500 mt-1 font-medium">0 bidang (0%)</div></div>
+          <div class="bg-blue-50 p-2.5 rounded-xl text-blue-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div>
         </div>
       </div>
 
-      <!-- Area Grafik Visual 2 Kolom (Kelas & Status) -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <!-- Grafik Donat (Kelas Tanah) -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-slate-800 text-sm">Distribusi Kelas Tanah</h3>
-            <span class="text-[10px] bg-slate-100 px-2 py-1 rounded font-semibold text-slate-500">Berdasarkan Luas</span>
-          </div>
-          <div class="relative h-52 w-full flex justify-center items-center">
-            <canvas id="chartDonut"></canvas>
-            <div id="donutEmpty" class="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-400 hidden">Belum ada data</div>
-          </div>
+          <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-slate-800 text-sm">Distribusi Kelas Tanah</h3><span class="text-[10px] bg-slate-100 px-2 py-1 rounded font-semibold text-slate-500">Luas (m²)</span></div>
+          <div class="relative h-52 w-full flex justify-center items-center"><canvas id="chartDonut"></canvas><div id="donutEmpty" class="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-400 hidden">Belum ada data</div></div>
           <div class="grid grid-cols-3 gap-2 mt-6">
-            <div class="bg-emerald-50 text-center p-2 rounded-lg border border-emerald-100">
-              <div id="pctProd" class="text-sm font-extrabold text-emerald-700">0%</div>
-              <div class="text-[10px] font-semibold text-emerald-600/80 mt-0.5">Produktif</div>
-            </div>
-            <div class="bg-amber-50 text-center p-2 rounded-lg border border-amber-100">
-              <div id="pctNonProd" class="text-sm font-extrabold text-amber-700">0%</div>
-              <div class="text-[10px] font-semibold text-amber-600/80 mt-0.5">Tidak Prod.</div>
-            </div>
-            <div class="bg-blue-50 text-center p-2 rounded-lg border border-blue-100">
-              <div id="pctPem" class="text-sm font-extrabold text-blue-700">0%</div>
-              <div class="text-[10px] font-semibold text-blue-600/80 mt-0.5">Pemukiman</div>
-            </div>
+            <div class="bg-emerald-50 text-center p-2 rounded-lg border border-emerald-100"><div id="pctProd" class="text-sm font-extrabold text-emerald-700">0%</div><div class="text-[10px] font-semibold text-emerald-600 mt-0.5">Produktif</div></div>
+            <div class="bg-amber-50 text-center p-2 rounded-lg border border-amber-100"><div id="pctNonProd" class="text-sm font-extrabold text-amber-700">0%</div><div class="text-[10px] font-semibold text-amber-600 mt-0.5">Tidak Prod.</div></div>
+            <div class="bg-blue-50 text-center p-2 rounded-lg border border-blue-100"><div id="pctPem" class="text-sm font-extrabold text-blue-700">0%</div><div class="text-[10px] font-semibold text-blue-600 mt-0.5">Pemukiman</div></div>
           </div>
         </div>
-
-        <!-- Grafik Pie (Status Kepemilikan) -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-slate-800 text-sm">Status Kepemilikan</h3>
-            <span class="text-[10px] bg-slate-100 px-2 py-1 rounded font-semibold text-slate-500">Berdasarkan Jumlah Bidang</span>
-          </div>
-          <div class="relative h-52 w-full flex justify-center items-center">
-            <canvas id="chartStatus"></canvas>
-            <div id="statusEmpty" class="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-400 hidden">Belum ada data</div>
-          </div>
-          <div class="text-center mt-6">
-            <p class="text-[11px] text-slate-500 font-medium">Data menampilkan komposisi legalitas / hak penguasaan tanah yang ada di seluruh dusun.</p>
-          </div>
+          <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-slate-800 text-sm">Status Kepemilikan</h3><span class="text-[10px] bg-slate-100 px-2 py-1 rounded font-semibold text-slate-500">Jumlah Bidang</span></div>
+          <div class="relative h-52 w-full flex justify-center items-center"><canvas id="chartStatus"></canvas><div id="statusEmpty" class="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-400 hidden">Belum ada data</div></div>
+          <div class="text-center mt-6"><p class="text-[11px] text-slate-500 font-medium">Data legalitas / hak penguasaan tanah di seluruh dusun.</p></div>
         </div>
       </div>
 
-      <!-- Grafik Bar -->
       <div class="grid grid-cols-1 gap-4">
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
           <div class="flex justify-between items-center mb-4">
-            <div>
-              <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                Perbandingan Luas per Blok / Kampung
-              </h3>
-              <p class="text-[10px] text-slate-500 mt-0.5">Akumulasi luas tanah untuk 5 blok/kampung terbesar</p>
-            </div>
-            <button onclick="switchTab('tab-rekap')" class="text-xs text-emerald-600 font-bold hover:text-emerald-800 transition flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
-              Lihat Detail <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-            </button>
+            <div><h3 class="font-bold text-slate-800 text-sm">Perbandingan Luas per Blok / Kampung</h3></div>
+            <button onclick="switchTab('tab-rekap')" class="text-xs text-emerald-600 font-bold hover:text-emerald-800 transition flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">Lihat Detail <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></button>
           </div>
-          <div class="relative h-64 w-full mt-4">
-            <canvas id="chartBar"></canvas>
-            <div id="barEmpty" class="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-400 hidden">Belum ada data</div>
-          </div>
+          <div class="relative h-64 w-full mt-4"><canvas id="chartBar"></canvas><div id="barEmpty" class="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-400 hidden">Belum ada data</div></div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: Rekap per Kampung / Blok -->
+    <!-- TAB 2: Rekap -->
     <div id="tab-rekap" class="hidden animate-in fade-in duration-300">
       <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-lg font-bold text-slate-800">Rekapitulasi Luas per Kampung / Blok</h2>
-        </div>
+        <h2 class="text-lg font-bold text-slate-800 mb-4">Rekapitulasi Luas per Kampung/Blok</h2>
         <div class="overflow-x-auto border border-slate-200 rounded-lg">
           <table class="w-full text-xs text-left">
             <thead class="bg-slate-100 text-slate-700 font-bold uppercase border-b border-slate-200">
-              <tr>
-                <th class="px-5 py-3">Kampung / Blok</th>
-                <th class="px-5 py-3 text-center">Jumlah Bidang</th>
-                <th class="px-5 py-3 text-right text-emerald-700">Produktif (m²)</th>
-                <th class="px-5 py-3 text-right text-amber-700">Tdk Produktif (m²)</th>
-                <th class="px-5 py-3 text-right text-blue-700">Pemukiman (m²)</th>
-                <th class="px-5 py-3 text-right font-extrabold text-slate-900">Total Luas (m²)</th>
-              </tr>
+              <tr><th class="px-5 py-3">Kampung / Blok</th><th class="px-5 py-3 text-center">Jumlah Bidang</th><th class="px-5 py-3 text-right text-emerald-700">Produktif (m²)</th><th class="px-5 py-3 text-right text-amber-700">Tdk Produktif (m²)</th><th class="px-5 py-3 text-right text-blue-700">Pemukiman (m²)</th><th class="px-5 py-3 text-right font-extrabold text-slate-900">Total Luas (m²)</th></tr>
             </thead>
-            <tbody id="rekapBlokBody" class="divide-y divide-slate-200 text-slate-700 text-sm">
-              <!-- Diisi JavaScript -->
-            </tbody>
+            <tbody id="rekapBlokBody" class="divide-y divide-slate-200 text-slate-700 text-sm"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- TAB 3: Data Bidang Tanah -->
+    <!-- TAB 3: Data -->
     <div id="tab-data" class="hidden animate-in fade-in duration-300 space-y-4">
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         
-        <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto">
-          <!-- Tampilkan Halaman -->
+        <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           <div class="flex items-center gap-2 border-r border-slate-300 pr-3">
             <label class="text-xs text-slate-700 font-bold">Tampilkan:</label>
             <select id="limitSelect" onchange="changeLimit()" class="border border-slate-300 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-emerald-500 font-bold bg-white cursor-pointer shadow-sm text-emerald-700">
-              <option value="10">10 Baris</option>
-              <option value="50">50 Baris</option>
-              <option value="100">100 Baris</option>
-              <option value="999999">Semua Data</option>
+              <option value="10">10 Baris</option><option value="50">50 Baris</option><option value="100">100 Baris</option><option value="999999">Semua Data</option>
             </select>
           </div>
-          
           <input type="text" id="searchInput" oninput="renderTable()" placeholder="Cari Nama, NIK, Alamat..." class="border border-slate-300 rounded-lg px-3 py-2 text-xs w-full sm:w-48 focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
-          
-          <!-- Filter Blok -->
-          <select id="filterBlok" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
-            <option value="">Semua Blok</option>
-          </select>
-          
-          <!-- Filter Kelas -->
-          <select id="filterKelas" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
-            <option value="">Semua Kelas</option>
-            <option value="Produktif">Produktif</option>
-            <option value="Tidak Produktif">Tidak Produktif</option>
-            <option value="Pemukiman">Pemukiman</option>
-          </select>
-
-          <!-- Filter Status Kepemilikan -->
-          <select id="filterStatus" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
-            <option value="">Semua Status</option>
-            <option value="Tanah Milik (Pribadi)">Tanah Milik</option>
-            <option value="Tanah Desa (Kas Desa)">Tanah Desa</option>
-            <option value="Tanah Bengkok">Tanah Bengkok</option>
-            <option value="Tanah Wakaf">Tanah Wakaf</option>
-            <option value="Tanah Negara">Tanah Negara</option>
-          </select>
+          <select id="filterBlok" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua Blok</option></select>
+          <select id="filterStatus" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-bold text-emerald-800"><option value="">Semua Status</option><option value="Tanah Milik (Pribadi)">Tanah Milik</option><option value="Tanah Desa (Kas Desa)">Tanah Desa</option><option value="Tanah Bengkok">Tanah Bengkok</option><option value="Tanah Wakaf">Tanah Wakaf</option><option value="Tanah Negara">Tanah Negara</option></select>
+          <select id="filterKelas" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua Kelas</option><option value="Produktif">Produktif</option><option value="Tidak Produktif">Tidak Produktif</option><option value="Pemukiman">Pemukiman</option></select>
         </div>
         
-        <!-- Info Halaman & Lompat Halaman -->
-        <div class="flex items-center gap-3 w-full xl:w-auto">
+        <div class="flex items-center gap-3 w-full lg:w-auto">
           <div class="text-xs text-slate-600 font-bold bg-slate-100 px-3 py-2 rounded-lg border border-slate-200 whitespace-nowrap" id="tableInfo">0 data</div>
-          
           <div class="flex items-center gap-1 bg-emerald-50 px-2 py-1.5 rounded-lg border border-emerald-200">
             <label class="text-[10px] font-bold text-emerald-800 whitespace-nowrap">Ke Hal:</label>
             <input type="number" id="jumpPageInput" min="1" class="w-12 border border-emerald-300 rounded px-1.5 py-1 text-xs text-center focus:outline-none focus:border-emerald-600 font-bold text-emerald-700">
@@ -277,153 +147,83 @@
           <table class="w-full text-xs text-left whitespace-nowrap">
             <thead class="bg-slate-100 text-slate-700 font-bold uppercase border-b border-slate-200">
               <tr>
-                <th class="px-4 py-3.5 w-12 text-center">No</th>
-                <th class="px-4 py-3.5">Pemilik / Penggarap</th>
-                <th class="px-4 py-3.5">NIK</th>
-                <th class="px-4 py-3.5">Kampung / Blok</th>
-                <th class="px-4 py-3.5">Alamat Tanah</th>
-                <th class="px-4 py-3.5">Status</th>
-                <th class="px-4 py-3.5">Kelas Tanah</th>
-                <th class="px-4 py-3.5 text-right">Luas (m²)</th>
-                <th class="px-4 py-3.5 text-center w-28">Aksi</th>
+                <th class="px-4 py-3.5 w-12 text-center">No</th><th class="px-4 py-3.5">Pemilik / Penggarap</th><th class="px-4 py-3.5">NIK</th><th class="px-4 py-3.5">Kampung / Blok</th><th class="px-4 py-3.5">Alamat Tanah</th><th class="px-4 py-3.5 text-blue-700">Status Kepemilikan</th><th class="px-4 py-3.5">Kelas Tanah</th><th class="px-4 py-3.5 text-right">Luas (m²)</th><th class="px-4 py-3.5 text-center w-28">Aksi</th>
               </tr>
             </thead>
-            <tbody id="dataTableBody" class="divide-y divide-slate-100 text-slate-700">
-              <!-- Data baris -->
-            </tbody>
+            <tbody id="dataTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
           </table>
         </div>
-        
-        <!-- Pagination Area -->
-        <div class="bg-slate-50 border-t border-slate-200 px-5 py-4 flex flex-wrap justify-center items-center gap-2 shadow-inner" id="paginationControls">
-          <!-- Tombol halaman di-generate JS -->
-        </div>
+        <div class="bg-slate-50 border-t border-slate-200 px-5 py-4 flex flex-wrap justify-center items-center gap-2 shadow-inner" id="paginationControls"></div>
       </div>
     </div>
 
-    <!-- TAB 4: Import, Export & Backup -->
+    <!-- TAB 4: Import -->
     <div id="tab-import" class="hidden animate-in fade-in duration-300 space-y-6">
       <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-6 items-center justify-between">
         <div class="max-w-xl">
-          <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            Import / Export Excel
-          </h3>
+          <h3 class="text-base font-bold text-slate-800 flex items-center gap-2"><svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Import / Export Excel</h3>
           <p class="text-xs text-slate-500 mt-2 leading-relaxed font-medium">Gunakan fitur ini untuk mengimpor data masal dari file Excel. Sistem otomatis menghapus teks "L=" atau "m2". Anda juga dapat mengekspor data yang sudah rapi ke format Excel (.xlsx) untuk laporan fisik desa.</p>
         </div>
         <div class="flex flex-col gap-3 min-w-[200px]">
-          <button onclick="document.getElementById('excelFileInput').click()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 text-sm font-bold px-4 py-3 rounded-lg transition text-center">
-            📥 Import File Excel
-          </button>
+          <button onclick="document.getElementById('excelFileInput').click()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 text-sm font-bold px-4 py-3 rounded-lg transition text-center">📥 Import File Excel</button>
           <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="importExcel(event)">
-          <button onclick="exportExcel()" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold px-4 py-3 rounded-lg shadow transition text-center">
-            📤 Export ke Excel
-          </button>
+          <button onclick="exportExcel()" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold px-4 py-3 rounded-lg shadow transition text-center">📤 Export ke Excel</button>
         </div>
       </div>
-
-      <div class="bg-white p-6 rounded-xl border border-blue-200 shadow-sm flex flex-col md:flex-row gap-6 items-center justify-between bg-blue-50/30">
+      <div class="bg-blue-50/30 p-6 rounded-xl border border-blue-200 shadow-sm flex flex-col md:flex-row gap-6 items-center justify-between">
         <div class="max-w-xl">
-          <h3 class="text-base font-bold text-blue-800 flex items-center gap-2">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
-            Sistem Pindah Komputer (Backup JSON)
-          </h3>
-          <p class="text-xs text-slate-500 mt-2 leading-relaxed font-medium">
-            Ingin memindahkan data dari laptop A ke laptop B? <br>
-            1. Klik <b>Backup Database</b> (File .json terunduh). Pindahkan file ke flashdisk.<br>
-            2. Di komputer tujuan, klik <b>Restore Database</b>. <br><br>
-            <span class="text-blue-700 font-bold bg-blue-100 px-2 py-0.5 rounded">Sistem Cerdas:</span> Saat melakukan Restore, Anda akan diberi pilihan untuk <b>MENGGABUNGKAN</b> data baru dengan data lama, atau <b>MENIMPA</b> (menghapus) data lama.
-          </p>
+          <h3 class="text-base font-bold text-blue-800 flex items-center gap-2"><svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg> Sistem Pindah Komputer (Backup JSON)</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed font-medium">1. Klik Backup Database. <br>2. Pindah file via Flashdisk. <br>3. Klik Restore Database di komputer tujuan. Bisa Pilih "Timpa" atau "Gabung".</p>
         </div>
         <div class="flex flex-col gap-3 min-w-[200px]">
-          <button onclick="backupData()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-4 py-3 rounded-lg shadow transition text-center">
-            💾 Backup Database
-          </button>
-          <button onclick="document.getElementById('restoreFileInput').click()" class="bg-white hover:bg-blue-50 text-blue-700 border border-blue-300 text-sm font-bold px-4 py-3 rounded-lg transition text-center">
-            📂 Restore Database
-          </button>
+          <button onclick="backupData()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-4 py-3 rounded-lg shadow text-center">💾 Backup Database</button>
+          <button onclick="document.getElementById('restoreFileInput').click()" class="bg-white hover:bg-blue-50 text-blue-700 border border-blue-300 text-sm font-bold px-4 py-3 rounded-lg text-center">📂 Restore Database</button>
           <input type="file" id="restoreFileInput" accept=".json" class="hidden" onchange="restoreData(event)">
-          
-          <button onclick="resetData()" class="mt-4 text-xs text-rose-600 hover:text-rose-800 font-bold underline text-center">
-            Kosongkan Seluruh Data
-          </button>
+          <button onclick="resetData()" class="mt-4 text-xs text-rose-600 hover:text-rose-800 font-bold underline text-center">Kosongkan Seluruh Data</button>
         </div>
       </div>
     </div>
-
   </main>
 
-  <!-- Footer -->
   <footer class="mt-auto border-t border-slate-200 bg-white">
     <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-500 gap-2 font-medium">
       <p>© Hak Cipta Pemerintahan Desa Gunungsari.</p>
-      <div class="flex gap-4 items-center">
-        <span class="flex items-center gap-1 text-emerald-600 font-bold"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow"></span> Penyimpanan Lokal Aktif</span>
-        <span class="hidden md:inline">•</span>
-        <span class="font-bold text-slate-800">KAB. TASIKMALAYA</span>
-      </div>
+      <div class="flex gap-4 items-center"><span class="flex items-center gap-1 text-emerald-600 font-bold"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow"></span> Penyimpanan Lokal Aktif</span><span class="hidden md:inline">•</span><span class="font-bold text-slate-800">KAB. TASIKMALAYA</span></div>
     </div>
   </footer>
 
-  <!-- Modal Form -->
+  <!-- Modal -->
   <div id="recordModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden transform scale-95 transition-transform duration-200" id="modalContent">
       <div class="bg-[#1a5f53] text-white px-5 py-4 flex justify-between items-center border-b-4 border-emerald-400">
         <h3 id="modalTitle" class="font-bold text-sm tracking-wide">Tambah Data Bidang</h3>
         <button onclick="closeModal()" class="text-emerald-200 hover:text-white transition text-xl font-bold">&times;</button>
       </div>
-
       <form id="recordForm" onsubmit="saveRecord(event)" class="p-6 space-y-4 text-xs">
         <input type="hidden" id="editId">
-
         <div class="grid grid-cols-2 gap-4">
-          <div class="col-span-2 md:col-span-1">
-            <label class="block font-bold text-slate-700 mb-1.5">Nama Pemilik / Penggarap <span class="text-rose-500">*</span></label>
-            <input type="text" id="inputNama" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Bpk. Suryana">
-          </div>
-          <div class="col-span-2 md:col-span-1">
-            <label class="block font-bold text-slate-700 mb-1.5">NIK (16 Digit)</label>
-            <input type="text" id="inputNik" maxlength="16" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-mono font-medium text-slate-800" placeholder="3206xxxxxxxxxxxx">
-          </div>
+          <div class="col-span-2 md:col-span-1"><label class="block font-bold mb-1">Nama Pemilik / Penggarap *</label><input type="text" id="inputNama" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Bpk. Suryana"></div>
+          <div class="col-span-2 md:col-span-1"><label class="block font-bold mb-1">NIK (16 Digit)</label><input type="text" id="inputNik" maxlength="16" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-mono font-medium text-slate-800" placeholder="3206xxxxxxxxxxxx"></div>
         </div>
-
         <div class="grid grid-cols-2 gap-4">
-          <div class="col-span-2 md:col-span-1">
-            <label class="block font-bold text-slate-700 mb-1.5">Kampung / Blok <span class="text-rose-500">*</span></label>
-            <input type="text" id="inputBlok" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Gunungsari 1">
-          </div>
-          <div class="col-span-2 md:col-span-1">
-            <label class="block font-bold text-slate-700 mb-1.5">Luas (m²) <span class="text-rose-500">*</span></label>
-            <input type="number" id="inputLuas" required min="1" step="any" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-bold text-emerald-700" placeholder="Contoh: 1250">
-          </div>
+          <div class="col-span-2 md:col-span-1"><label class="block font-bold mb-1">Kampung / Blok *</label><input type="text" id="inputBlok" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Gunungsari 1"></div>
+          <div class="col-span-2 md:col-span-1"><label class="block font-bold mb-1">Luas (m²) *</label><input type="number" id="inputLuas" required min="1" step="any" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-bold text-emerald-700" placeholder="Contoh: 1250"></div>
         </div>
-
         <div class="grid grid-cols-2 gap-4">
           <div class="col-span-2 md:col-span-1">
-            <label class="block font-bold text-slate-700 mb-1.5">Status Kepemilikan <span class="text-rose-500">*</span></label>
-            <select id="inputStatus" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition bg-white font-bold text-slate-700">
-              <option value="Tanah Milik (Pribadi)">Tanah Milik (Pribadi)</option>
-              <option value="Tanah Desa (Kas Desa)">Tanah Desa (Kas Desa)</option>
-              <option value="Tanah Bengkok">Tanah Bengkok</option>
-              <option value="Tanah Wakaf">Tanah Wakaf</option>
-              <option value="Tanah Negara">Tanah Negara</option>
+            <label class="block font-bold mb-1 text-blue-800">Status Kepemilikan *</label>
+            <select id="inputStatus" required class="w-full border-2 border-blue-200 rounded-lg p-2.5 outline-none bg-blue-50 font-bold text-slate-700">
+              <option value="Tanah Milik (Pribadi)">Tanah Milik (Pribadi)</option><option value="Tanah Desa (Kas Desa)">Tanah Desa (Kas Desa)</option><option value="Tanah Bengkok">Tanah Bengkok</option><option value="Tanah Wakaf">Tanah Wakaf</option><option value="Tanah Negara">Tanah Negara</option>
             </select>
           </div>
           <div class="col-span-2 md:col-span-1">
-            <label class="block font-bold text-slate-700 mb-1.5">Pengkelasan Tanah <span class="text-rose-500">*</span></label>
-            <select id="inputKelas" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition bg-white font-bold text-slate-700">
-              <option value="Produktif">Tanah Produktif (Sawah / Kebun Aktif)</option>
-              <option value="Tidak Produktif">Tanah Tidak Produktif (Lahan Tidur / Semak)</option>
-              <option value="Pemukiman">Tanah Pemukiman (Pekarangan / Rumah)</option>
+            <label class="block font-bold mb-1">Kelas Tanah *</label>
+            <select id="inputKelas" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 outline-none bg-white font-bold text-slate-700">
+              <option value="Produktif">Tanah Produktif (Sawah / Kebun Aktif)</option><option value="Tidak Produktif">Tanah Tidak Produktif (Lahan Tidur / Semak)</option><option value="Pemukiman">Tanah Pemukiman (Pekarangan / Rumah)</option>
             </select>
           </div>
         </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1.5">Alamat Tanah</label>
-          <input type="text" id="inputAlamat" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="RT / RW Desa Gunungsari">
-        </div>
-
+        <div><label class="block font-bold mb-1">Alamat Tanah</label><input type="text" id="inputAlamat" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="RT / RW Desa Gunungsari"></div>
         <div class="flex justify-end gap-2 pt-4 mt-2 border-t border-slate-100">
           <button type="button" onclick="closeModal()" class="px-5 py-2.5 text-slate-500 font-bold hover:bg-slate-100 rounded-lg transition border border-slate-200">Batal</button>
           <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-md transition">Simpan Data</button>
@@ -433,23 +233,16 @@
   </div>
 
   <script>
-    // ==========================================
-    // 1. STATE & KONFIGURASI DATABASE
-    // ==========================================
-    const STORAGE_KEY = 'siperta_gunungsari_final_v3';
-    const LOGO_KEY = 'siperta_logo_saved';
-    
+
+    const STORAGE_KEY = 'siperta_gunungsari_final_v5';
     let tanahList = [];
     let currentPage = 1;
     let rowsPerPage = 10;
     let myDonutChart = null;
     let myBarChart = null;
-    let myStatusChart = null; // Chart Baru
+    let myStatusChart = null; 
     let globalRekapBlok = {}; 
 
-    // ==========================================
-    // 2. JAM DIGITAL, MUSIK, DAN LOGO
-    // ==========================================
     function updateClock() {
       const now = new Date();
       const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -460,30 +253,15 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    function changeLogo(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const base64Image = e.target.result;
-          document.getElementById('appLogo').src = base64Image;
-          localStorage.setItem(LOGO_KEY, base64Image);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
     function loadAndPlayMusic(event) {
       const file = event.target.files[0];
       if (file) {
         const audioUrl = URL.createObjectURL(file);
         const music = document.getElementById('bgMusic');
         const btn = document.getElementById('btnMusic');
-        
         music.src = audioUrl;
         music.volume = 0.5;
         music.play();
-        
         btn.innerHTML = '<span>⏸ Jeda Instrumen</span>';
         btn.classList.replace('bg-[#0f443b]', 'bg-amber-600');
         btn.classList.replace('border-[#2b7a6c]', 'border-amber-400');
@@ -493,12 +271,10 @@
     function toggleMusic() {
       const music = document.getElementById('bgMusic');
       const btn = document.getElementById('btnMusic');
-      
       if(!music.src || music.src.endsWith('siperta.html') || music.src === window.location.href) {
         document.getElementById('audioInput').click();
         return;
       }
-      
       if (music.paused) {
         music.play();
         btn.innerHTML = '<span>⏸ Jeda Instrumen</span>';
@@ -512,20 +288,11 @@
       }
     }
 
-    // ==========================================
-    // 3. INISIALISASI & TAB NAVIGASI
-    // ==========================================
     window.addEventListener('DOMContentLoaded', () => {
       const savedData = localStorage.getItem(STORAGE_KEY);
       if (savedData) {
         try { tanahList = JSON.parse(savedData); } catch(e) { tanahList = []; }
       }
-
-      const savedLogo = localStorage.getItem(LOGO_KEY);
-      if (savedLogo) {
-        document.getElementById('appLogo').src = savedLogo;
-      }
-
       initCharts();
       renderAll();
     });
@@ -533,40 +300,30 @@
     function switchTab(tabId) {
       const tabs = ['tab-ringkasan', 'tab-rekap', 'tab-data', 'tab-import'];
       const navs = ['nav-ringkasan', 'nav-rekap', 'nav-data', 'nav-import'];
-      
       tabs.forEach(id => document.getElementById(id).classList.add('hidden'));
       navs.forEach(id => {
         const el = document.getElementById(id);
         el.classList.remove('text-white', 'border-b-[3px]', 'border-emerald-400');
         el.classList.add('hover:text-white');
       });
-
       document.getElementById(tabId).classList.remove('hidden');
       const activeNavId = tabId.replace('tab-', 'nav-');
       const activeNav = document.getElementById(activeNavId);
       activeNav.classList.remove('hover:text-white');
       activeNav.classList.add('text-white', 'border-b-[3px]', 'border-emerald-400');
-      
       if(tabId === 'tab-ringkasan') updateCharts();
     }
 
-    function autoSave() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList));
-    }
+    function autoSave() { localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList)); }
 
     function renderAll() {
       document.getElementById('navTotalBadge').innerText = formatAngka(tanahList.length);
       populateBlokFilter();
       renderStatsAndRekap();
       renderTable();
-      if(!document.getElementById('tab-ringkasan').classList.contains('hidden')) {
-        updateCharts();
-      }
+      if(!document.getElementById('tab-ringkasan').classList.contains('hidden')) updateCharts();
     }
 
-    // ==========================================
-    // 4. STATISTIK & REKAP
-    // ==========================================
     function renderStatsAndRekap() {
       let totalBidang = tanahList.length;
       let luasTotal = 0, luasProd = 0, bidangProd = 0, luasNonProd = 0, bidangNonProd = 0, luasPem = 0, bidangPem = 0;
@@ -576,16 +333,13 @@
         const luas = Number(item.luas) || 0;
         const blok = (item.blok || 'Belum Ditentukan').trim();
         luasTotal += luas;
-
         if (!rekapBlok[blok]) rekapBlok[blok] = { count: 0, prod: 0, nonProd: 0, pem: 0, total: 0 };
         rekapBlok[blok].count += 1;
         rekapBlok[blok].total += luas;
-
         if (item.kelas === 'Produktif') { luasProd += luas; bidangProd += 1; rekapBlok[blok].prod += luas; }
         else if (item.kelas === 'Tidak Produktif') { luasNonProd += luas; bidangNonProd += 1; rekapBlok[blok].nonProd += luas; }
         else { luasPem += luas; bidangPem += 1; rekapBlok[blok].pem += luas; }
       });
-
       globalRekapBlok = rekapBlok;
 
       const pctProd = totalBidang ? ((bidangProd/totalBidang)*100).toFixed(1) : 0;
@@ -608,12 +362,10 @@
       const tbody = document.getElementById('rekapBlokBody');
       tbody.innerHTML = '';
       const blokKeys = Object.keys(rekapBlok).sort();
-
       if (blokKeys.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 font-bold text-slate-400">Belum ada data terekap.</td></tr>`;
         return;
       }
-
       blokKeys.forEach(blok => {
         const b = rekapBlok[blok];
         const tr = document.createElement('tr');
@@ -630,11 +382,7 @@
       });
     }
 
-    // ==========================================
-    // 5. CHART.JS VISUALIZATION
-    // ==========================================
     function initCharts() {
-      // Donut Chart: Kelas Tanah
       const ctxDonut = document.getElementById('chartDonut').getContext('2d');
       myDonutChart = new Chart(ctxDonut, {
         type: 'doughnut',
@@ -642,21 +390,13 @@
         options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false } } }
       });
 
-      // Pie Chart: Status Kepemilikan (BARU)
       const ctxStatus = document.getElementById('chartStatus').getContext('2d');
       myStatusChart = new Chart(ctxStatus, {
         type: 'pie',
-        data: { 
-          labels: ['Tanah Milik', 'Tanah Desa', 'Bengkok', 'Wakaf', 'Negara'], 
-          datasets: [{ data: [0,0,0,0,0], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#64748b'], borderWidth: 2 }] 
-        },
-        options: { 
-          responsive: true, maintainAspectRatio: false, 
-          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size: 11, weight:'bold'} } } } 
-        }
+        data: { labels: ['Tanah Milik', 'Tanah Desa', 'Bengkok', 'Wakaf', 'Negara'], datasets: [{ data: [0,0,0,0,0], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#64748b'], borderWidth: 2 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size: 11, weight:'bold'} } } } }
       });
 
-      // Bar Chart: Rekap Blok
       const ctxBar = document.getElementById('chartBar').getContext('2d');
       myBarChart = new Chart(ctxBar, {
         type: 'bar',
@@ -666,18 +406,13 @@
     }
 
     function updateCharts() {
-      // Update Donut Kelas
       let lProd = 0, lNon = 0, lPem = 0;
-      // Update Pie Status (Jumlah Bidang)
       let sMilik = 0, sDesa = 0, sBengkok = 0, sWakaf = 0, sNegara = 0;
-
       tanahList.forEach(t => {
-        // Kelas
         if(t.kelas === 'Produktif') lProd += t.luas;
         else if(t.kelas === 'Tidak Produktif') lNon += t.luas;
         else lPem += t.luas;
 
-        // Status
         const status = t.status || 'Tanah Milik (Pribadi)';
         if(status.includes('Milik')) sMilik++;
         else if(status.includes('Desa')) sDesa++;
@@ -686,7 +421,6 @@
         else sNegara++;
       });
 
-      // Render Kelas Chart
       if(lProd === 0 && lNon === 0 && lPem === 0) {
         document.getElementById('chartDonut').style.display = 'none';
         document.getElementById('donutEmpty').classList.remove('hidden');
@@ -697,7 +431,6 @@
         myDonutChart.update();
       }
 
-      // Render Status Chart
       if(sMilik === 0 && sDesa === 0 && sBengkok === 0 && sWakaf === 0 && sNegara === 0) {
         document.getElementById('chartStatus').style.display = 'none';
         document.getElementById('statusEmpty').classList.remove('hidden');
@@ -708,7 +441,6 @@
         myStatusChart.update();
       }
 
-      // Render Bar Blok Chart
       const bloks = Object.keys(globalRekapBlok).map(key => ({ name: key, data: globalRekapBlok[key] })).sort((a,b) => b.data.total - a.data.total).slice(0, 5);
       if(bloks.length === 0) {
         document.getElementById('chartBar').style.display = 'none';
@@ -726,9 +458,6 @@
       }
     }
 
-    // ==========================================
-    // 6. TABEL & HALAMAN
-    // ==========================================
     function changeLimit() {
       const selectVal = document.getElementById('limitSelect').value;
       rowsPerPage = parseInt(selectVal);
@@ -753,7 +482,6 @@
       });
 
       const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
-
       if (page >= 1 && page <= totalPages) {
         currentPage = page;
         renderTable();
@@ -762,10 +490,7 @@
       }
     }
 
-    function goToPage(page) {
-      currentPage = page;
-      renderTable();
-    }
+    function goToPage(page) { currentPage = page; renderTable(); }
 
     function renderTable() {
       const search = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -788,7 +513,6 @@
 
       const startIdx = (currentPage - 1) * rowsPerPage;
       const currentItems = filtered.slice(startIdx, startIdx + rowsPerPage);
-
       const tbody = document.getElementById('dataTableBody');
       tbody.innerHTML = '';
 
@@ -802,7 +526,6 @@
           let badgeColor = "bg-emerald-100 text-emerald-800 border-emerald-200";
           if (item.kelas === 'Tidak Produktif') badgeColor = "bg-amber-100 text-amber-800 border-amber-200";
           if (item.kelas === 'Pemukiman') badgeColor = "bg-blue-100 text-blue-800 border-blue-200";
-
           const statusTampil = item.status || 'Tanah Milik (Pribadi)';
 
           tr.innerHTML = `
@@ -811,7 +534,7 @@
             <td class="px-4 py-3 font-mono text-slate-500 font-medium">${item.nik || '<span class="text-slate-300 italic">-</span>'}</td>
             <td class="px-4 py-3 font-bold text-slate-700">${item.blok || '-'}</td>
             <td class="px-4 py-3 text-slate-500 max-w-[150px] truncate font-medium" title="${item.alamat || ''}">${item.alamat || '-'}</td>
-            <td class="px-4 py-3 font-bold text-slate-700 text-[11px]">${statusTampil}</td>
+            <td class="px-4 py-3 font-bold text-blue-800 text-[11px]">${statusTampil}</td>
             <td class="px-4 py-3"><span class="inline-block px-2.5 py-1 rounded text-[10px] font-extrabold border ${badgeColor}">${item.kelas}</span></td>
             <td class="px-4 py-3 text-right font-black text-emerald-800 text-sm">${formatAngka(item.luas)}</td>
             <td class="px-4 py-3 text-center space-x-2">
@@ -842,20 +565,9 @@
 
       let startP = Math.max(1, currentPage - 2);
       let endP = Math.min(totalPages, currentPage + 2);
-      
-      if(startP > 1) {
-        wrapper.appendChild(createPageBtn(1));
-        if(startP > 2) wrapper.appendChild(createDots());
-      }
-      
-      for(let p = startP; p <= endP; p++) {
-        wrapper.appendChild(createPageBtn(p));
-      }
-
-      if(endP < totalPages) {
-        if(endP < totalPages - 1) wrapper.appendChild(createDots());
-        wrapper.appendChild(createPageBtn(totalPages));
-      }
+      if(startP > 1) { wrapper.appendChild(createPageBtn(1)); if(startP > 2) wrapper.appendChild(createDots()); }
+      for(let p = startP; p <= endP; p++) { wrapper.appendChild(createPageBtn(p)); }
+      if(endP < totalPages) { if(endP < totalPages - 1) wrapper.appendChild(createDots()); wrapper.appendChild(createPageBtn(totalPages)); }
 
       const btnNext = document.createElement('button');
       btnNext.innerHTML = 'Lanjut ›';
@@ -868,20 +580,12 @@
     function createPageBtn(p) {
       const btn = document.createElement('button');
       btn.innerText = p;
-      if(p === currentPage) {
-        btn.className = "px-4 py-2 border rounded-lg font-extrabold bg-emerald-600 text-white border-emerald-600 shadow-md transform scale-105 transition";
-      } else {
-        btn.className = "px-4 py-2 border rounded-lg font-bold text-slate-600 border-slate-300 hover:bg-slate-100 transition";
-        btn.onclick = () => goToPage(p);
-      }
+      if(p === currentPage) { btn.className = "px-4 py-2 border rounded-lg font-extrabold bg-emerald-600 text-white border-emerald-600 shadow-md transform scale-105 transition"; } 
+      else { btn.className = "px-4 py-2 border rounded-lg font-bold text-slate-600 border-slate-300 hover:bg-slate-100 transition"; btn.onclick = () => goToPage(p); }
       return btn;
     }
-    
     function createDots() {
-      const span = document.createElement('span');
-      span.innerText = '...';
-      span.className = "px-3 py-2 text-slate-400 font-black tracking-widest";
-      return span;
+      const span = document.createElement('span'); span.innerText = '...'; span.className = "px-3 py-2 text-slate-400 font-black tracking-widest"; return span;
     }
 
     function populateBlokFilter() {
@@ -890,17 +594,11 @@
       const bloks = Array.from(new Set(tanahList.map(t => t.blok).filter(Boolean))).sort();
       select.innerHTML = '<option value="">Semua Blok / Kampung</option>';
       bloks.forEach(b => {
-        const opt = document.createElement('option');
-        opt.value = b;
-        opt.innerText = b;
-        select.appendChild(opt);
+        const opt = document.createElement('option'); opt.value = b; opt.innerText = b; select.appendChild(opt);
       });
       select.value = current;
     }
 
-    // ==========================================
-    // 7. FUNGSI CRUD MODAL
-    // ==========================================
     function openModal(isEdit = false) {
       document.getElementById('recordModal').classList.remove('hidden');
       setTimeout(() => document.getElementById('modalContent').classList.remove('scale-95'), 10);
@@ -934,7 +632,6 @@
         const newId = new Date().getTime(); 
         tanahList.unshift({ id: newId, nama, nik, blok, luas, alamat, kelas, status });
       }
-
       autoSave(); closeModal(); renderAll();
     }
 
@@ -963,14 +660,10 @@
 
     function resetData() {
       if(confirm("⚠ PERINGATAN KERAS! ⚠\nAnda yakin ingin MENGHAPUS SELURUH DATA SISTEM?\nPastikan Anda sudah klik 'Backup Database' sebelum melakukan ini.")) {
-        tanahList = [];
-        autoSave(); renderAll();
+        tanahList = []; autoSave(); renderAll();
       }
     }
 
-    // ==========================================
-    // 8. IMPORT, EXPORT, BACKUP RESTORE (PILIH GABUNG/TIMPA)
-    // ==========================================
     function importExcel(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -981,15 +674,12 @@
           const workbook = XLSX.read(data, { type: 'array' });
           const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1 });
           let importedCount = 0;
-          
           for (let i = 1; i < rows.length; i++) {
             const row = rows[i];
             if (!row || row.length < 2) continue;
-
             const nama = (row[1] || '').toString().replace(/%%/g, '').trim();
             const rawLuas = (row[2] || '').toString();
             const cleanLuas = parseFloat(rawLuas.replace(/[^0-9.]/g, '')) || 0;
-
             if (nama && cleanLuas > 0) {
               tanahList.push({
                 id: new Date().getTime() + i,
@@ -1013,14 +703,10 @@
     function exportExcel() {
       if(tanahList.length === 0) return alert("Belum ada data untuk diekspor!");
       const exportData = tanahList.map((t, idx) => ({
-        "No": idx + 1, 
-        "Nama Pemilik/Penggarap": t.nama, 
-        "NIK": t.nik,
-        "Kampung/Blok": t.blok, 
-        "Alamat Tanah": t.alamat,
+        "No": idx + 1, "Nama Pemilik/Penggarap": t.nama, "NIK": t.nik,
+        "Kampung/Blok": t.blok, "Alamat Tanah": t.alamat,
         "Status Kepemilikan": t.status || "Tanah Milik (Pribadi)",
-        "Kelas Tanah": t.kelas, 
-        "Luas (m2)": t.luas
+        "Kelas Tanah": t.kelas, "Luas (m2)": t.luas
       }));
       const ws = XLSX.utils.json_to_sheet(exportData);
       const wb = XLSX.utils.book_new();
@@ -1045,26 +731,15 @@
         try {
           const imported = JSON.parse(evt.target.result);
           if(Array.isArray(imported)) {
-            
-            // FITUR BARU: Konfirmasi Gabung atau Timpa
-            const mergeConfirm = confirm(
-              "PENTING: Pengaturan Pemulihan Data!\n\n" +
-              "▶ Klik [OK] untuk MENGGABUNGKAN data backup ini dengan data yang sudah ada.\n" +
-              "▶ Klik [Cancel] untuk MENIMPA (menghapus data lama & mengganti dengan data backup ini)."
-            );
-
+            const mergeConfirm = confirm("PENTING: Pengaturan Pemulihan Data!\n\n▶ Klik [OK] untuk MENGGABUNGKAN data backup ini dengan data yang sudah ada.\n▶ Klik [Cancel] untuk MENIMPA (menghapus data lama & mengganti dengan data backup ini).");
             if (mergeConfirm) {
               let currentMaxId = tanahList.length > 0 ? Math.max(...tanahList.map(t => t.id || 0)) : new Date().getTime();
-              imported.forEach((item, index) => {
-                item.id = currentMaxId + index + 1; // Cegah ID bentrok
-                tanahList.push(item);
-              });
+              imported.forEach((item, index) => { item.id = currentMaxId + index + 1; tanahList.push(item); });
               alert("Data berhasil DIGABUNGKAN secara aman!");
             } else {
               tanahList = imported;
               alert("Data berhasil DIPULIHKAN (Data lama telah ditimpa)!");
             }
-
             autoSave(); renderAll(); switchTab('tab-ringkasan');
           } else alert("Format file JSON tidak valid.");
         } catch(err) { alert("Gagal membaca file Backup JSON."); }
@@ -1073,9 +748,7 @@
       e.target.value = '';
     }
 
-    function formatAngka(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+    function formatAngka(num) { return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
   </script>
 </body>
 </html>
