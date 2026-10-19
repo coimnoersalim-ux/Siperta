@@ -205,6 +205,7 @@
     <div id="tab-data" class="hidden animate-in fade-in duration-300 space-y-4">
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         
+        <!-- Filter dan Tampilkan Jumlah Baris -->
         <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           <!-- Tampilkan Halaman -->
           <div class="flex items-center gap-2 border-r border-slate-300 pr-3">
@@ -217,15 +218,29 @@
             </select>
           </div>
           
-          <input type="text" id="searchInput" oninput="renderTable()" placeholder="Cari Nama, NIK, Alamat..." class="border border-slate-300 rounded-lg px-3 py-2 text-xs w-full sm:w-56 focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
+          <input type="text" id="searchInput" oninput="renderTable()" placeholder="Cari Nama, NIK, Alamat..." class="border border-slate-300 rounded-lg px-3 py-2 text-xs w-full sm:w-48 focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
+          
+          <!-- Filter Blok -->
           <select id="filterBlok" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
             <option value="">Semua Blok</option>
           </select>
+          
+          <!-- Filter Kelas -->
           <select id="filterKelas" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
             <option value="">Semua Kelas</option>
             <option value="Produktif">Produktif</option>
             <option value="Tidak Produktif">Tidak Produktif</option>
             <option value="Pemukiman">Pemukiman</option>
+          </select>
+
+          <!-- Filter Status Kepemilikan (BARU) -->
+          <select id="filterStatus" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
+            <option value="">Semua Status</option>
+            <option value="Tanah Milik (Pribadi)">Tanah Milik</option>
+            <option value="Tanah Desa (Kas Desa)">Tanah Desa</option>
+            <option value="Tanah Bengkok">Tanah Bengkok</option>
+            <option value="Tanah Wakaf">Tanah Wakaf</option>
+            <option value="Tanah Negara">Tanah Negara</option>
           </select>
         </div>
         
@@ -243,17 +258,18 @@
 
       <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto min-h-[400px]">
-          <table class="w-full text-xs text-left">
+          <table class="w-full text-xs text-left whitespace-nowrap">
             <thead class="bg-slate-100 text-slate-700 font-bold uppercase border-b border-slate-200">
               <tr>
-                <th class="px-5 py-3.5 w-12 text-center">No</th>
-                <th class="px-5 py-3.5">Pemilik / Penggarap</th>
-                <th class="px-5 py-3.5">NIK</th>
-                <th class="px-5 py-3.5">Kampung / Blok</th>
-                <th class="px-5 py-3.5">Alamat Tanah</th>
-                <th class="px-5 py-3.5">Kelas Tanah</th>
-                <th class="px-5 py-3.5 text-right">Luas (m²)</th>
-                <th class="px-5 py-3.5 text-center w-28">Aksi</th>
+                <th class="px-4 py-3.5 w-12 text-center">No</th>
+                <th class="px-4 py-3.5">Pemilik / Penggarap</th>
+                <th class="px-4 py-3.5">NIK</th>
+                <th class="px-4 py-3.5">Kampung / Blok</th>
+                <th class="px-4 py-3.5">Alamat Tanah</th>
+                <th class="px-4 py-3.5">Status</th>
+                <th class="px-4 py-3.5">Kelas Tanah</th>
+                <th class="px-4 py-3.5 text-right">Luas (m²)</th>
+                <th class="px-4 py-3.5 text-center w-28">Aksi</th>
               </tr>
             </thead>
             <tbody id="dataTableBody" class="divide-y divide-slate-100 text-slate-700">
@@ -335,7 +351,7 @@
 
   <!-- Modal Form -->
   <div id="recordModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden transform scale-95 transition-transform duration-200" id="modalContent">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden transform scale-95 transition-transform duration-200" id="modalContent">
       <div class="bg-[#1a5f53] text-white px-5 py-4 flex justify-between items-center border-b-4 border-emerald-400">
         <h3 id="modalTitle" class="font-bold text-sm tracking-wide">Tambah Data Bidang</h3>
         <button onclick="closeModal()" class="text-emerald-200 hover:text-white transition text-xl font-bold">&times;</button>
@@ -344,39 +360,53 @@
       <form id="recordForm" onsubmit="saveRecord(event)" class="p-6 space-y-4 text-xs">
         <input type="hidden" id="editId">
 
-        <div>
-          <label class="block font-bold text-slate-700 mb-1.5">Nama Pemilik / Penggarap <span class="text-rose-500">*</span></label>
-          <input type="text" id="inputNama" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Bpk. Suryana">
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1.5">NIK (16 Digit)</label>
-          <input type="text" id="inputNik" maxlength="16" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-mono font-medium text-slate-800" placeholder="3206xxxxxxxxxxxx">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-2 md:col-span-1">
+            <label class="block font-bold text-slate-700 mb-1.5">Nama Pemilik / Penggarap <span class="text-rose-500">*</span></label>
+            <input type="text" id="inputNama" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Bpk. Suryana">
+          </div>
+          <div class="col-span-2 md:col-span-1">
+            <label class="block font-bold text-slate-700 mb-1.5">NIK (16 Digit)</label>
+            <input type="text" id="inputNik" maxlength="16" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-mono font-medium text-slate-800" placeholder="3206xxxxxxxxxxxx">
+          </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-          <div>
+          <div class="col-span-2 md:col-span-1">
             <label class="block font-bold text-slate-700 mb-1.5">Kampung / Blok <span class="text-rose-500">*</span></label>
             <input type="text" id="inputBlok" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Gunungsari 1">
           </div>
-          <div>
+          <div class="col-span-2 md:col-span-1">
             <label class="block font-bold text-slate-700 mb-1.5">Luas (m²) <span class="text-rose-500">*</span></label>
             <input type="number" id="inputLuas" required min="1" step="any" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-bold text-emerald-700" placeholder="Contoh: 1250">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Opsi Baru: Status Kepemilikan -->
+          <div class="col-span-2 md:col-span-1">
+            <label class="block font-bold text-slate-700 mb-1.5">Status Kepemilikan <span class="text-rose-500">*</span></label>
+            <select id="inputStatus" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition bg-white font-bold text-slate-700">
+              <option value="Tanah Milik (Pribadi)">Tanah Milik (Pribadi)</option>
+              <option value="Tanah Desa (Kas Desa)">Tanah Desa (Kas Desa)</option>
+              <option value="Tanah Bengkok">Tanah Bengkok</option>
+              <option value="Tanah Wakaf">Tanah Wakaf</option>
+              <option value="Tanah Negara">Tanah Negara</option>
+            </select>
+          </div>
+          <div class="col-span-2 md:col-span-1">
+            <label class="block font-bold text-slate-700 mb-1.5">Pengkelasan Tanah <span class="text-rose-500">*</span></label>
+            <select id="inputKelas" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition bg-white font-bold text-slate-700">
+              <option value="Produktif">Tanah Produktif (Sawah / Kebun Aktif)</option>
+              <option value="Tidak Produktif">Tanah Tidak Produktif (Lahan Tidur / Semak)</option>
+              <option value="Pemukiman">Tanah Pemukiman (Pekarangan / Rumah)</option>
+            </select>
           </div>
         </div>
 
         <div>
           <label class="block font-bold text-slate-700 mb-1.5">Alamat Tanah</label>
           <input type="text" id="inputAlamat" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="RT / RW Desa Gunungsari">
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1.5">Pengkelasan Tanah <span class="text-rose-500">*</span></label>
-          <select id="inputKelas" required class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition bg-white font-bold text-slate-700">
-            <option value="Produktif">Tanah Produktif (Sawah / Kebun Aktif)</option>
-            <option value="Tidak Produktif">Tanah Tidak Produktif (Lahan Tidur / Semak)</option>
-            <option value="Pemukiman">Tanah Pemukiman (Pekarangan / Rumah)</option>
-          </select>
         </div>
 
         <div class="flex justify-end gap-2 pt-4 mt-2 border-t border-slate-100">
@@ -388,7 +418,10 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'siperta_gunungsari_final';
+    // ==========================================
+    // 1. STATE & KONFIGURASI DATABASE
+    // ==========================================
+    const STORAGE_KEY = 'siperta_gunungsari_final_v2';
     const LOGO_KEY = 'siperta_logo_saved';
     
     let tanahList = [];
@@ -399,7 +432,7 @@
     let globalRekapBlok = {}; 
 
     // ==========================================
-    // 1. JAM DIGITAL, MUSIK, DAN LOGO
+    // 2. JAM DIGITAL, MUSIK, DAN LOGO
     // ==========================================
     function updateClock() {
       const now = new Date();
@@ -411,7 +444,6 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Fungsi Mengganti dan Menyimpan Logo
     function changeLogo(event) {
       const file = event.target.files[0];
       if (file) {
@@ -419,13 +451,12 @@
         reader.onload = function(e) {
           const base64Image = e.target.result;
           document.getElementById('appLogo').src = base64Image;
-          localStorage.setItem(LOGO_KEY, base64Image); // Simpan ke browser
+          localStorage.setItem(LOGO_KEY, base64Image);
         };
         reader.readAsDataURL(file);
       }
     }
 
-    // Fungsi Mengganti Musik Lokal
     function loadAndPlayMusic(event) {
       const file = event.target.files[0];
       if (file) {
@@ -466,16 +497,14 @@
     }
 
     // ==========================================
-    // 2. INISIALISASI
+    // 3. INISIALISASI & TAB NAVIGASI
     // ==========================================
     window.addEventListener('DOMContentLoaded', () => {
-      // Load Data
       const savedData = localStorage.getItem(STORAGE_KEY);
       if (savedData) {
         try { tanahList = JSON.parse(savedData); } catch(e) { tanahList = []; }
       }
 
-      // Load Logo Tersimpan
       const savedLogo = localStorage.getItem(LOGO_KEY);
       if (savedLogo) {
         document.getElementById('appLogo').src = savedLogo;
@@ -520,7 +549,7 @@
     }
 
     // ==========================================
-    // 3. STATISTIK & REKAP
+    // 4. STATISTIK & REKAP
     // ==========================================
     function renderStatsAndRekap() {
       let totalBidang = tanahList.length;
@@ -586,7 +615,7 @@
     }
 
     // ==========================================
-    // 4. CHART.JS VISUALIZATION
+    // 5. CHART.JS VISUALIZATION
     // ==========================================
     function initCharts() {
       const ctxDonut = document.getElementById('chartDonut').getContext('2d');
@@ -640,7 +669,7 @@
     }
 
     // ==========================================
-    // 5. TABEL & HALAMAN (PAGINATION)
+    // 6. TABEL & HALAMAN
     // ==========================================
     function changeLimit() {
       const selectVal = document.getElementById('limitSelect').value;
@@ -655,12 +684,14 @@
       const search = document.getElementById('searchInput').value.toLowerCase().trim();
       const filterBlok = document.getElementById('filterBlok').value;
       const filterKelas = document.getElementById('filterKelas').value;
+      const filterStatus = document.getElementById('filterStatus').value;
 
       const filtered = tanahList.filter(item => {
         const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
         const matchBlok = !filterBlok || item.blok === filterBlok;
         const matchKelas = !filterKelas || item.kelas === filterKelas;
-        return matchSearch && matchBlok && matchKelas;
+        const matchStatus = !filterStatus || item.status === filterStatus;
+        return matchSearch && matchBlok && matchKelas && matchStatus;
       });
 
       const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
@@ -682,12 +713,14 @@
       const search = document.getElementById('searchInput').value.toLowerCase().trim();
       const filterBlok = document.getElementById('filterBlok').value;
       const filterKelas = document.getElementById('filterKelas').value;
+      const filterStatus = document.getElementById('filterStatus').value; // Baru
 
       const filtered = tanahList.filter(item => {
         const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
         const matchBlok = !filterBlok || item.blok === filterBlok;
         const matchKelas = !filterKelas || item.kelas === filterKelas;
-        return matchSearch && matchBlok && matchKelas;
+        const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
+        return matchSearch && matchBlok && matchKelas && matchStatus;
       });
 
       const totalItems = filtered.length;
@@ -702,7 +735,7 @@
       tbody.innerHTML = '';
 
       if (currentItems.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr>`;
       } else {
         currentItems.forEach((item, index) => {
           const tr = document.createElement('tr');
@@ -712,15 +745,19 @@
           if (item.kelas === 'Tidak Produktif') badgeColor = "bg-amber-100 text-amber-800 border-amber-200";
           if (item.kelas === 'Pemukiman') badgeColor = "bg-blue-100 text-blue-800 border-blue-200";
 
+          // Pastikan data lama yang tidak punya status ter-default ke Tanah Milik
+          const statusTampil = item.status || 'Tanah Milik (Pribadi)';
+
           tr.innerHTML = `
-            <td class="px-5 py-3 text-center text-slate-500 font-bold">${startIdx + index + 1}</td>
-            <td class="px-5 py-3 font-extrabold text-slate-800">${item.nama}</td>
-            <td class="px-5 py-3 font-mono text-slate-500 font-medium">${item.nik || '<span class="text-slate-300 italic">-</span>'}</td>
-            <td class="px-5 py-3 font-bold text-slate-700">${item.blok || '-'}</td>
-            <td class="px-5 py-3 text-slate-500 max-w-[150px] truncate font-medium" title="${item.alamat || ''}">${item.alamat || '-'}</td>
-            <td class="px-5 py-3"><span class="inline-block px-2.5 py-1 rounded text-[10px] font-extrabold border ${badgeColor}">${item.kelas}</span></td>
-            <td class="px-5 py-3 text-right font-black text-emerald-800 text-sm">${formatAngka(item.luas)}</td>
-            <td class="px-5 py-3 text-center space-x-3">
+            <td class="px-4 py-3 text-center text-slate-500 font-bold">${startIdx + index + 1}</td>
+            <td class="px-4 py-3 font-extrabold text-slate-800">${item.nama}</td>
+            <td class="px-4 py-3 font-mono text-slate-500 font-medium">${item.nik || '<span class="text-slate-300 italic">-</span>'}</td>
+            <td class="px-4 py-3 font-bold text-slate-700">${item.blok || '-'}</td>
+            <td class="px-4 py-3 text-slate-500 max-w-[150px] truncate font-medium" title="${item.alamat || ''}">${item.alamat || '-'}</td>
+            <td class="px-4 py-3 font-bold text-slate-700 text-[11px]">${statusTampil}</td>
+            <td class="px-4 py-3"><span class="inline-block px-2.5 py-1 rounded text-[10px] font-extrabold border ${badgeColor}">${item.kelas}</span></td>
+            <td class="px-4 py-3 text-right font-black text-emerald-800 text-sm">${formatAngka(item.luas)}</td>
+            <td class="px-4 py-3 text-center space-x-2">
               <button onclick="editRecord(${item.id})" class="text-blue-600 hover:text-blue-800 font-extrabold transition">Edit</button>
               <button onclick="deleteRecord(${item.id})" class="text-rose-500 hover:text-rose-700 font-extrabold transition">Hapus</button>
             </td>
@@ -805,7 +842,7 @@
     }
 
     // ==========================================
-    // 6. FUNGSI CRUD MODAL
+    // 7. FUNGSI CRUD MODAL
     // ==========================================
     function openModal(isEdit = false) {
       document.getElementById('recordModal').classList.remove('hidden');
@@ -831,13 +868,14 @@
       const luas = parseFloat(document.getElementById('inputLuas').value) || 0;
       const alamat = document.getElementById('inputAlamat').value.trim();
       const kelas = document.getElementById('inputKelas').value;
+      const status = document.getElementById('inputStatus').value; // Baru
 
       if (id) {
         const target = tanahList.find(item => item.id == id);
-        if (target) { Object.assign(target, {nama, nik, blok, luas, alamat, kelas}); }
+        if (target) { Object.assign(target, {nama, nik, blok, luas, alamat, kelas, status}); }
       } else {
         const newId = new Date().getTime(); 
-        tanahList.unshift({ id: newId, nama, nik, blok, luas, alamat, kelas });
+        tanahList.unshift({ id: newId, nama, nik, blok, luas, alamat, kelas, status });
       }
 
       autoSave(); closeModal(); renderAll();
@@ -853,6 +891,7 @@
       document.getElementById('inputLuas').value = target.luas;
       document.getElementById('inputAlamat').value = target.alamat || '';
       document.getElementById('inputKelas').value = target.kelas;
+      document.getElementById('inputStatus').value = target.status || 'Tanah Milik (Pribadi)'; // Baru
       openModal(true);
     }
 
@@ -873,7 +912,7 @@
     }
 
     // ==========================================
-    // 7. IMPORT, EXPORT, BACKUP RESTORE
+    // 8. IMPORT, EXPORT, BACKUP RESTORE
     // ==========================================
     function importExcel(e) {
       const file = e.target.files[0];
@@ -900,6 +939,7 @@
                 nama: nama, luas: cleanLuas,
                 blok: "Gunungsari (Import)", alamat: "-",
                 kelas: cleanLuas > 1000 ? "Produktif" : (cleanLuas < 300 ? "Pemukiman" : "Tidak Produktif"),
+                status: "Tanah Milik (Pribadi)", // Status Default untuk Data Import
                 nik: ""
               });
               importedCount++;
@@ -916,9 +956,14 @@
     function exportExcel() {
       if(tanahList.length === 0) return alert("Belum ada data untuk diekspor!");
       const exportData = tanahList.map((t, idx) => ({
-        "No": idx + 1, "Nama Pemilik/Penggarap": t.nama, "NIK": t.nik,
-        "Kampung/Blok": t.blok, "Alamat Tanah": t.alamat,
-        "Kelas Tanah": t.kelas, "Luas (m2)": t.luas
+        "No": idx + 1, 
+        "Nama Pemilik/Penggarap": t.nama, 
+        "NIK": t.nik,
+        "Kampung/Blok": t.blok, 
+        "Alamat Tanah": t.alamat,
+        "Status Kepemilikan": t.status || "Tanah Milik (Pribadi)", // Baru
+        "Kelas Tanah": t.kelas, 
+        "Luas (m2)": t.luas
       }));
       const ws = XLSX.utils.json_to_sheet(exportData);
       const wb = XLSX.utils.book_new();
