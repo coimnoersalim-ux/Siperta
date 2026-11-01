@@ -571,20 +571,18 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
     }
 
     async function autoSave() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList));
-  try {
-    await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8', 
-      },
-      body: JSON.stringify(tanahList)
-    });
-    console.log('Sinkronisasi Database Cloud Berhasil!');
-  } catch(e) {
-    console.error('Gagal menyimpan ke Database Cloud', e);
-  }
-}
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList));
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'sync_all', data: tanahList })
+        });
+        console.log('Sinkronisasi Massal Cloud Berhasil!');
+      } catch(e) {
+        console.error('Gagal menyimpan ke Database Cloud', e);
+      }
+    }
 
     function renderAll() {
       document.getElementById('navTotalBadge').innerText = formatAngka(tanahList.length);
@@ -935,7 +933,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       }, 150);
     }
 
-    function saveRecord(e) {
+    async function saveRecord(e) {
       e.preventDefault();
       const id = document.getElementById('editId').value;
       const nama = document.getElementById('inputNama').value.trim();
@@ -945,15 +943,43 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       const alamat = document.getElementById('inputAlamat').value.trim();
       const kelas = document.getElementById('inputKelas').value;
       const status = document.getElementById('inputStatus').value;
+      
+      const submitBtn = document.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = 'Menyimpan ke Cloud...';
+      submitBtn.disabled = true;
+
+      let action = 'add';
+      let payload = { nama, nik, blok, luas, alamat, kelas, status };
 
       if (id) {
+        action = 'edit';
+        payload.id = parseInt(id);
         const target = tanahList.find(item => item.id == id);
-        if (target) { Object.assign(target, {nama, nik, blok, luas, alamat, kelas, status}); }
+        if (target) { Object.assign(target, payload); }
       } else {
-        const newId = new Date().getTime(); 
-        tanahList.unshift({ id: newId, nama, nik, blok, luas, alamat, kelas, status });
+        payload.id = new Date().getTime(); 
+        tanahList.unshift(payload);
       }
-      autoSave(); closeModal(); renderAll();
+      
+      // Update UI langsung
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList));
+      closeModal(); 
+      renderAll();
+
+      // Kirim ke Google Sheets secara real-time
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: action, data: payload })
+        });
+      } catch(err) {
+        console.error('Gagal sinkron ke Sheet:', err);
+      }
+      
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
     }
 
     function editRecord(id) {
@@ -970,12 +996,26 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       openModal(true);
     }
 
-    function deleteRecord(id) {
+    async function deleteRecord(id) {
       const target = tanahList.find(item => item.id == id);
       if (!target) return;
       if (confirm(`YAKIN MENGHAPUS PERMANEN data bidang milik:\n"${target.nama}" (Luas: ${target.luas} m²)?`)) {
         tanahList = tanahList.filter(item => item.id != id);
-        autoSave(); renderAll();
+        
+        // Update UI langsung
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList));
+        renderAll();
+        
+        // Hapus dari Google Sheets secara real-time
+        try {
+          await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'delete', id: id })
+          });
+        } catch(err) {
+          console.error('Gagal menghapus dari Sheet:', err);
+        }
       }
     }
 
