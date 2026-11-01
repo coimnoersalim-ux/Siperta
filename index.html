@@ -976,4 +976,101 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       if (confirm(`YAKIN MENGHAPUS PERMANEN data bidang milik:\n"${target.nama}" (Luas: ${target.luas} m²)?`)) {
         tanahList = tanahList.filter(item => item.id != id);
         autoSave(); renderAll();
-     
+      }
+    }
+
+    function resetData() {
+      if(confirm("⚠ PERINGATAN KERAS! ⚠\nAnda yakin ingin MENGHAPUS SELURUH DATA SISTEM?\nPastikan Anda sudah klik 'Backup Database' sebelum melakukan ini.")) {
+        tanahList = []; autoSave(); renderAll();
+      }
+    }
+
+    function importExcel(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const data = new Uint8Array(evt.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1 });
+          let importedCount = 0;
+          for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row || row.length < 2) continue;
+            const nama = (row[1] || '').toString().replace(/%%/g, '').trim();
+            const rawLuas = (row[2] || '').toString();
+            const cleanLuas = parseFloat(rawLuas.replace(/[^0-9.]/g, '')) || 0;
+            if (nama && cleanLuas > 0) {
+              tanahList.push({
+                id: new Date().getTime() + i,
+                nama: nama, luas: cleanLuas,
+                blok: "Gunungsari (Import)", alamat: "-",
+                kelas: cleanLuas > 1000 ? "Produktif" : (cleanLuas < 300 ? "Pemukiman" : "Tidak Produktif"),
+                status: "Tanah Milik (Pribadi)",
+                nik: ""
+              });
+              importedCount++;
+            }
+          }
+          autoSave(); renderAll(); switchTab('tab-data');
+          alert(`Berhasil! ${formatAngka(importedCount)} data berhasil diimpor ke sistem.`);
+        } catch (err) { alert("Gagal membaca file Excel. Pastikan format tabel sesuai."); }
+      };
+      reader.readAsArrayBuffer(file);
+      e.target.value = '';
+    }
+
+    function exportExcel() {
+      if(tanahList.length === 0) return alert("Belum ada data untuk diekspor!");
+      const exportData = tanahList.map((t, idx) => ({
+        "No": idx + 1, "Nama Pemilik/Penggarap": t.nama, "NIK": t.nik,
+        "Kampung/Blok": t.blok, "Alamat Tanah": t.alamat,
+        "Status Kepemilikan": t.status || "Tanah Milik (Pribadi)",
+        "Kelas Tanah": t.kelas, "Luas (m2)": t.luas
+      }));
+      const ws = XLSX.utils.json_to_sheet(exportData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Data Tanah");
+      XLSX.writeFile(wb, "SIPERTA_Gunungsari.xlsx");
+    }
+
+    function backupData() {
+      if(tanahList.length === 0) return alert("Belum ada data untuk di-backup!");
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tanahList));
+      const dl = document.createElement('a');
+      dl.setAttribute("href", dataStr);
+      dl.setAttribute("download", `Database_SIPERTA_Gunungsari_${new Date().getTime()}.json`);
+      document.body.appendChild(dl); dl.click(); dl.remove();
+    }
+
+    function restoreData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const imported = JSON.parse(evt.target.result);
+          if(Array.isArray(imported)) {
+            const mergeConfirm = confirm("PENTING: Pengaturan Pemulihan Data!\n\n▶ Klik [OK] untuk MENGGABUNGKAN data backup ini dengan data yang sudah ada.\n▶ Klik [Cancel] untuk MENIMPA (menghapus data lama & mengganti dengan data backup ini).");
+            if (mergeConfirm) {
+              let currentMaxId = tanahList.length > 0 ? Math.max(...tanahList.map(t => t.id || 0)) : new Date().getTime();
+              imported.forEach((item, index) => { item.id = currentMaxId + index + 1; tanahList.push(item); });
+              alert("Data berhasil DIGABUNGKAN secara aman!");
+            } else {
+              tanahList = imported;
+              alert("Data berhasil DIPULIHKAN (Data lama telah ditimpa)!");
+            }
+            autoSave(); renderAll(); switchTab('tab-ringkasan');
+          } else alert("Format file JSON tidak valid.");
+        } catch(err) { alert("Gagal membaca file Backup JSON."); }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    function formatAngka(num) { return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+  </script>
+
+
+</body></html>
