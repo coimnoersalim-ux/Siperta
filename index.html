@@ -76,6 +76,9 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
           <span>+ Tambah Bidang</span>
         </button>
         
+                <button onclick="forceSync()" id="btnSync" class="bg-slate-700 hover:bg-slate-600 text-white border border-slate-500 text-xs font-bold px-3 py-2 rounded-lg shadow transition flex items-center gap-2">
+          <span>🔄 Sinkron Data</span>
+        </button>
         <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-600 text-white border border-slate-500 text-xs font-bold px-4 py-2 rounded-lg shadow transition flex items-center gap-2">
           <span>🖨 Cetak</span>
         </button>
@@ -530,12 +533,33 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
     
     
 
+    
+    async function forceSync() {
+      const btn = document.getElementById('btnSync');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span>⏳ Tunggu...</span>';
+      
+      try {
+        const response = await fetch(SCRIPT_URL + "?t=" + new Date().getTime());
+        const data = await response.json();
+        
+        if(data && Array.isArray(data)) {
+           tanahList = data;
+           localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList)); 
+           renderAll();
+        }
+      } catch(e) {
+        console.error('Error Sync:', e);
+      }
+      btn.innerHTML = originalText;
+    }
+
     window.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('tableInfo').innerText = "Sedang memuat data dari Cloud...";
       initCharts();
       
       try {
-        const response = await fetch(SCRIPT_URL);
+        const response = await fetch(SCRIPT_URL + "?t=" + new Date().getTime());
         const data = await response.json();
         
         if(data && Array.isArray(data)) {
@@ -578,7 +602,6 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action: 'sync_all', data: tanahList })
         });
-        console.log('Sinkronisasi Massal Cloud Berhasil!');
       } catch(e) {
         console.error('Gagal menyimpan ke Database Cloud', e);
       }
@@ -946,7 +969,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       
       const submitBtn = document.querySelector('button[type="submit"]');
       const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = 'Menyimpan ke Cloud...';
+      submitBtn.innerHTML = 'Menyimpan...';
       submitBtn.disabled = true;
 
       let action = 'add';
@@ -954,7 +977,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
       if (id) {
         action = 'edit';
-        payload.id = parseInt(id);
+        payload.id = parseInt(id); // atau biarkan string jika ID besar
         const target = tanahList.find(item => item.id == id);
         if (target) { Object.assign(target, payload); }
       } else {
@@ -962,12 +985,10 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
         tanahList.unshift(payload);
       }
       
-      // Update UI langsung
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList));
       closeModal(); 
       renderAll();
 
-      // Kirim ke Google Sheets secara real-time
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST',
@@ -1002,11 +1023,9 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       if (confirm(`YAKIN MENGHAPUS PERMANEN data bidang milik:\n"${target.nama}" (Luas: ${target.luas} m²)?`)) {
         tanahList = tanahList.filter(item => item.id != id);
         
-        // Update UI langsung
         localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList));
         renderAll();
         
-        // Hapus dari Google Sheets secara real-time
         try {
           await fetch(SCRIPT_URL, {
             method: 'POST',
