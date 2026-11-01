@@ -48,6 +48,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
     }
   </style>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased">
 
@@ -96,7 +97,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
     <!-- Teks Berjalan (Running Text) -->
     <div class="bg-slate-800 text-blue-300 text-xs py-1.5 px-4 overflow-hidden border-t border-slate-700">
       <marquee behavior="scroll" direction="left" scrollamount="5" class="font-medium tracking-wide">
-        Selamat Datang di Sistem Informasi Pertanahan (SIPERTA) Desa Gunungsari Kecamatan Cikatomas Kabupaten Tasikmalaya.
+        Selamat Datang di Portal Resmi Sistem Informasi Pertanahan (SIPERTA) Desa Gunungsari, Kecamatan Cikatomas, Kabupaten Tasikmalaya. Seluruh pembaruan data bidang tanah terintegrasi secara real-time. Hubungi Kasi Pemerintahan untuk perbaikan data administrasi pertanahan.
       </marquee>
     </div>
   </header>
@@ -554,27 +555,37 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       btn.innerHTML = originalText;
     }
 
+    
     window.addEventListener('DOMContentLoaded', async () => {
-      document.getElementById('tableInfo').innerText = "Sedang memuat data dari Cloud...";
       initCharts();
       
-      try {
-        const response = await fetch(SCRIPT_URL + "?t=" + new Date().getTime());
-        const data = await response.json();
-        
-        if(data && Array.isArray(data)) {
-           tanahList = data;
-           localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList)); 
-        }
-      } catch(e) {
-        console.error('Gagal mengambil data dari server, beralih ke memori lokal', e);
-        const savedData = localStorage.getItem(STORAGE_KEY);
-        if (savedData) {
-          try { tanahList = JSON.parse(savedData); } catch(err) { tanahList = []; }
+      // Load dari LocalStorage terlebih dahulu agar aplikasi terasa cepat & tidak hilang saat refresh
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      if (savedData) {
+        try { 
+          tanahList = JSON.parse(savedData); 
+          renderAll(); // Langsung tampilkan data lokal
+        } catch(err) { 
+          tanahList = []; 
         }
       }
       
-      renderAll();
+      // Kemudian lakukan sinkronisasi ke cloud di belakang layar secara diam-diam (silent sync)
+      try {
+        // Karena fetch ke Apps Script kadang diblokir browser jika langsung (CORS), kita gunakan pendekatan aman
+        // Namun, jika forceSync() berfungsi, fetch ini seharusnya berfungsi.
+        const response = await fetch(SCRIPT_URL + "?t=" + new Date().getTime());
+        const data = await response.json();
+        
+        if(data && Array.isArray(data) && data.length > 0) {
+           // Update data hanya jika server mengembalikan data valid (bukan array kosong karena error)
+           tanahList = data;
+           localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList)); 
+           renderAll(); // Render ulang dengan data segar dari server
+        }
+      } catch(e) {
+        console.warn('Silent sync gagal (mungkin offline/CORS), tetap menggunakan data lokal.', e);
+      }
     });
 
     function switchTab(tabId) {
