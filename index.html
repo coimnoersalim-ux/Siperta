@@ -54,7 +54,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
   
 
   <!-- Header Navigasi -->
-  <header class="text-white shadow-lg sticky top-0 z-40" style="background-color: #0f172a; border-bottom: 1px solid #1e293b;">
+  <header class="text-white shadow-lg sticky top-0 z-40" style="background: linear-gradient(90deg, #0f766e, #115e59); border-bottom: 3px solid #14b8a6;">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
       
       <div class="flex items-center gap-3">
@@ -96,7 +96,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
     <!-- Teks Berjalan (Running Text) -->
     <div class="bg-slate-800 text-blue-300 text-xs py-1.5 px-4 overflow-hidden border-t border-slate-700">
       <marquee behavior="scroll" direction="left" scrollamount="5" class="font-medium tracking-wide">
-        Selamat Datang di Sistem Informasi Pertanahan (SIPERTA) Desa Gunungsari, Kabupaten Tasikmalaya. PENGUMUMAN: Pastikan Anda selalu mengklik menu "Backup Database" setelah selesai menginput atau mengubah data agar progres Anda tetap aman.
+        Selamat Datang di Sistem Informasi Pertanahan (SIPERTA) Desa Gunungsari Kecamatan Cikatomas Kabupaten Tasikmalaya.
       </marquee>
     </div>
   </header>
@@ -365,16 +365,16 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
         <div class="max-w-xl">
           <h3 class="text-base font-bold text-blue-800 flex items-center gap-2">
             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-            Cetak Laporan Per Kampung (Ukuran F4)
+            Cetak Laporan Per Alamat (Ukuran F4)
           </h3>
           <p class="text-xs text-slate-500 mt-2 leading-relaxed font-medium">
-            Fitur khusus untuk mencetak rekap data bidang tanah berdasarkan wilayah (Kampung/Blok). <br>
+            Fitur khusus untuk mencetak rekap data bidang tanah berdasarkan lokasi/alamat tanah. <br>
             Sistem otomatis mengatur format kertas ke <b>F4 (Folio)</b> yang rapi, lengkap dengan kop surat dan area tanda tangan Kasipem.
           </p>
         </div>
         <div class="flex flex-col gap-3 min-w-[200px]">
           <select id="printBlokFilter" class="border border-blue-300 rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-blue-500 shadow-sm font-bold text-slate-700 bg-white cursor-pointer">
-            <option value="">-- Pilih Kampung/Blok --</option>
+            <option value="">-- Pilih Alamat Tanah --</option>
           </select>
           <button onclick="printLaporanBlok()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-4 py-3 rounded-lg shadow transition text-center flex justify-center items-center gap-2">
             🖨 Cetak Laporan F4
@@ -477,7 +477,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       <p style="font-size: 12px; margin: 5px 0; color: black;">Alamat: Kantor Kepala Desa Gunungsari, Kec. Cikatomas, Kab. Tasikmalaya</p>
       <hr style="border: 0; border-top: 3px solid black; margin: 10px 0;">
       <h3 style="font-size: 16px; font-weight: bold; margin: 15px 0 5px 0; color: black;">DATA KEPEMILIKAN TANAH</h3>
-      <h4 style="font-size: 14px; font-weight: bold; margin: 0; color: black;" id="printBlokTitle">KAMPUNG / BLOK: -</h4>
+      <h4 style="font-size: 14px; font-weight: bold; margin: 0; color: black;" id="printBlokTitle">ALAMAT LOKASI: -</h4>
     </div>
     <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 30px; color: black;">
       <thead>
@@ -888,7 +888,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       const bloks = Array.from(new Set(tanahList.map(t => t.blok).filter(Boolean))).sort();
       
       let optHtml = '<option value="">Semua Blok / Kampung</option>';
-      let printOptHtml = '<option value="">-- Pilih Kampung/Blok --</option>';
+      let printOptHtml = '<option value="">-- Pilih Alamat Tanah --</option>';
       
       bloks.forEach(b => {
         optHtml += `<option value="${b}">${b}</option>`;
@@ -905,13 +905,13 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
     }
 
     function printLaporanBlok() {
-      const blok = document.getElementById('printBlokFilter').value;
-      if (!blok) return alert('Pilih Kampung/Blok yang ingin dicetak terlebih dahulu!');
+      const alamat = document.getElementById('printBlokFilter').value;
+      if (!alamat) return alert('Pilih Alamat Tanah yang ingin dicetak terlebih dahulu!');
 
-      const filtered = tanahList.filter(t => t.blok === blok);
-      if (filtered.length === 0) return alert('Data kosong untuk blok tersebut.');
+      const filtered = tanahList.filter(t => t.alamat === alamat);
+      if (filtered.length === 0) return alert('Data kosong untuk alamat tersebut.');
 
-      document.getElementById('printBlokTitle').innerText = `KAMPUNG / BLOK: ${blok.toUpperCase()}`;
+      document.getElementById('printBlokTitle').innerText = `ALAMAT LOKASI: ${alamat.toUpperCase()}`;
 
       const tbody = document.getElementById('printTableBody');
       tbody.innerHTML = '';
