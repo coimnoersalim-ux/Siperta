@@ -528,21 +528,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
     updateClock();
 
     
-    }
-
     
-      if (music.paused) {
-        music.play();
-        btn.innerHTML = '<span>⏸ Jeda Instrumen</span>';
-        btn.classList.replace('bg-[#0f443b]', 'bg-amber-600');
-        btn.classList.replace('border-[#2b7a6c]', 'border-amber-500');
-      } else {
-        music.pause();
-        btn.innerHTML = '<span>🎵 Putar Instrumen</span>';
-        btn.classList.replace('bg-amber-600', 'bg-[#0f443b]');
-        btn.classList.replace('border-amber-500', 'border-[#2b7a6c]');
-      }
-    }
 
     window.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('tableInfo').innerText = "Sedang memuat data dari Cloud...";
@@ -979,4 +965,15 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       document.getElementById('inputBlok').value = target.blok || '';
       document.getElementById('inputLuas').value = target.luas;
       document.getElementById('inputAlamat').value = target.alamat || '';
-      document.getElementById('
+      document.getElementById('inputKelas').value = target.kelas;
+      document.getElementById('inputStatus').value = target.status || 'Tanah Milik (Pribadi)';
+      openModal(true);
+    }
+
+    function deleteRecord(id) {
+      const target = tanahList.find(item => item.id == id);
+      if (!target) return;
+      if (confirm(`YAKIN MENGHAPUS PERMANEN data bidang milik:\n"${target.nama}" (Luas: ${target.luas} m²)?`)) {
+        tanahList = tanahList.filter(item => item.id != id);
+        autoSave(); renderAll();
+     
