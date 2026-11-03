@@ -1098,17 +1098,39 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
     }
 
     function exportExcel() {
-      if(tanahList.length === 0) return alert("Belum ada data untuk diekspor!");
-      const exportData = tanahList.map((t, idx) => ({
-        "No": idx + 1, "Nama Pemilik/Penggarap": t.nama, "NIK": t.nik,
-        "Kampung/Blok": t.blok, "Alamat Tanah": t.alamat,
-        "Status Kepemilikan": t.status || "Tanah Milik (Pribadi)",
-        "Kelas Tanah": t.kelas, "Luas (m2)": t.luas
-      }));
-      const ws = XLSX.utils.json_to_sheet(exportData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Data Tanah");
-      XLSX.writeFile(wb, "SIPERTA_Gunungsari.xlsx");
+      if (!tanahList || tanahList.length === 0) {
+        alert("Belum ada data untuk diekspor!");
+        return;
+      }
+      
+      // Pastikan library XLSX sudah siap
+      if (typeof XLSX === 'undefined') {
+        alert("Pustaka SheetJS (XLSX) belum termuat. Periksa koneksi internet Anda atau muat ulang halaman.");
+        return;
+      }
+
+      try {
+        const exportData = tanahList.map((t, idx) => ({
+          "No": idx + 1, 
+          "Nama Pemilik/Penggarap": t.nama || '', 
+          "NIK": t.nik || '',
+          "Kampung/Blok": t.blok || '', 
+          "Alamat Tanah": t.alamat || '',
+          "Status Kepemilikan": t.status || "Tanah Milik (Pribadi)",
+          "Kelas Tanah": t.kelas || '', 
+          "Luas (m2)": Number(t.luas) || 0
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(exportData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Data Tanah");
+        
+        // Unduh file excel
+        XLSX.writeFile(wb, "SIPERTA_Gunungsari_Export.xlsx");
+      } catch (err) {
+        console.error("Gagal mengekspor Excel:", err);
+        alert("Terjadi kesalahan saat membuat file Excel.");
+      }
     }
 
     function backupData() {
