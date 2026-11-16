@@ -284,6 +284,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           
           <!-- Filter Blok -->
           <select id="filterBlok" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua Blok / Kampung</option></select>
+          <select id="filterAlamat" onchange="currentPage = 1; renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua Alamat Tanah</option></select>
           
           <!-- Filter Kelas -->
           <select id="filterKelas" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
@@ -802,13 +803,15 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const filterBlok = document.getElementById('filterBlok').value;
       const filterKelas = document.getElementById('filterKelas').value;
       const filterStatus = document.getElementById('filterStatus').value;
+      const filterAlamat = (document.getElementById('filterAlamat') || {}).value || '';
 
       const filtered = tanahList.filter(item => {
         const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
         const matchBlok = !filterBlok || item.blok === filterBlok;
         const matchKelas = !filterKelas || item.kelas === filterKelas;
         const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
-        return matchSearch && matchBlok && matchKelas && matchStatus;
+        const matchAlamat = !filterAlamat || (item.alamat || '').trim() === filterAlamat;
+        return matchSearch && matchBlok && matchKelas && matchStatus && matchAlamat;
       });
 
       const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
@@ -827,13 +830,15 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const filterBlok = document.getElementById('filterBlok').value;
       const filterKelas = document.getElementById('filterKelas').value;
       const filterStatus = document.getElementById('filterStatus').value;
+      const filterAlamat = (document.getElementById('filterAlamat') || {}).value || '';
 
       const filtered = tanahList.filter(item => {
         const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
         const matchBlok = !filterBlok || item.blok === filterBlok;
         const matchKelas = !filterKelas || item.kelas === filterKelas;
         const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
-        return matchSearch && matchBlok && matchKelas && matchStatus;
+        const matchAlamat = !filterAlamat || (item.alamat || '').trim() === filterAlamat;
+        return matchSearch && matchBlok && matchKelas && matchStatus && matchAlamat;
       });
 
       const totalItems = filtered.length;
@@ -940,6 +945,13 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const exSel = document.getElementById('exportBlokFilter');
       if (exSel) { const exCur = exSel.value; exSel.innerHTML = optHtml; exSel.value = exCur; }
       select.value = current;
+      const aSel = document.getElementById('filterAlamat');
+      if (aSel) {
+        const aCur = aSel.value;
+        const alamats = Array.from(new Set(tanahList.map(t => (t.alamat || '').trim()).filter(a => a && a !== '-'))).sort((a, b) => a.localeCompare(b, 'id'));
+        aSel.innerHTML = '<option value="">Semua Alamat Tanah</option>' + alamats.map(a => `<option value="${esc(a)}">${esc(a)}</option>`).join('');
+        aSel.value = aCur;
+      }
       
       if(printSelect) {
          printSelect.innerHTML = printOptHtml;
