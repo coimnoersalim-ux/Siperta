@@ -1191,15 +1191,17 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           const f = kinds.findIndex(k => 'nibr'.includes(k));
           const addDataRow = (r) => {
             const row = ws.addRow(r);
+            row.height = 18;
             kinds.forEach((k, i) => {
               const c = row.getCell(i + 1);
               c.font = F(); c.border = border;
-              c.alignment = { vertical: 'middle', wrapText: true, horizontal: k === 'c' ? 'center' : 'nibr'.includes(k) ? 'right' : 'left' };
+              c.alignment = { vertical: 'middle', shrinkToFit: true, horizontal: k === 'c' ? 'center' : 'nibr'.includes(k) ? 'right' : 'left' };
               if (FM[k]) c.numFmt = FM[k]; else if (k === 't') c.numFmt = '@';
             });
           };
           const addSumRow = (label, formulaFor, resultFor) => {
             const tr = ws.addRow([]).number;
+            ws.getRow(tr).height = 20;
             merged(tr, 1, f, label, { bold: true }, { horizontal: 'right' });
             for (let i = 1; i <= n; i++) {
               const c = ws.getCell(tr, i);
@@ -1213,13 +1215,22 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             }
             return tr;
           };
-          const sizes = paged ? (landscape ? [12, 20] : [32, 42]) : [Infinity, Infinity];
-          const multi = paged && rows.length > sizes[0];
+          const totalPt = widths.reduce((a, w) => a + Math.round(7 * w + 5), 0) * 0.75;
+          const printW = (landscape ? 12 : 7.5) * 72;
+          const scale = Math.max(40, Math.min(100, Math.floor(printW / totalPt * 100) - 2));
+          const capPt = (landscape ? 518 : 842) / (scale / 100) - 22;
+          const sizes = paged ? [Math.floor((capPt - 165 - 26 - 20) / 18), Math.floor((capPt - 26 - 20) / 18)] : [Infinity, Infinity];
+          const multi = paged && rows.length > sizes[0] - 9;
           const sumOf = (arr, i) => arr.reduce((a, r) => a + (Number(r[i]) || 0), 0);
           const subs = [];
           let pos = 0, ci = 0;
           while (pos < rows.length) {
-            const part = rows.slice(pos, pos + (ci === 0 ? sizes[0] : sizes[1]));
+            const size = ci === 0 ? sizes[0] : sizes[1];
+            const remaining = rows.length - pos;
+            let take = size;
+            if (!paged || remaining <= size - 9) take = remaining;
+            else if (remaining <= size) take = Math.max(remaining - 3, 1);
+            const part = rows.slice(pos, pos + take);
             pos += part.length;
             const r1 = ws.lastRow.number + 1, r2 = r1 + part.length - 1;
             part.forEach(addDataRow);
@@ -1241,8 +1252,9 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           ws.pageSetup = {
             paperSize: 14, // Folio / F4
             orientation: landscape ? 'landscape' : 'portrait',
-            fitToPage: true, fitToWidth: 1, fitToHeight: 0,
+            ...(paged ? { fitToPage: false, scale } : { fitToPage: true, fitToWidth: 1, fitToHeight: 1 }),
             horizontalCentered: true,
+            printArea: 'A1:' + ws.getColumn(n).letter + (trow + 7),
             printTitlesRow: HR + ':' + HR,
             margins: { left: 0.5, right: 0.5, top: 0.6, bottom: 0.7, header: 0.3, footer: 0.3 }
           };
