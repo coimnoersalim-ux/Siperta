@@ -1182,7 +1182,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           merged(9, 1, n, hargaText(), { size: 9, italic: true });
 
           const hr = ws.getRow(HR);
-          hr.height = 26;
+          hr.height = 40;
           headers.forEach((h, i) => {
             const c = hr.getCell(i + 1);
             c.value = h; c.font = F({ bold: true }); c.border = border; c.fill = grey('FFD9D9D9');
@@ -1219,7 +1219,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           const printW = (landscape ? 12 : 7.5) * 72;
           const scale = Math.max(40, Math.min(100, Math.floor(printW / totalPt * 100) - 2));
           const capPt = (landscape ? 518 : 842) / (scale / 100) - 22;
-          const sizes = paged ? [Math.floor((capPt - 165 - 26 - 20) / 18), Math.floor((capPt - 26 - 20) / 18)] : [Infinity, Infinity];
+          const sizes = paged ? [Math.floor((capPt - 165 - 40 - 20) / 18), Math.floor((capPt - 40 - 20) / 18)] : [Infinity, Infinity];
           const multi = paged && rows.length > sizes[0] - 9;
           const sumOf = (arr, i) => arr.reduce((a, r) => a + (Number(r[i]) || 0), 0);
           const subs = [];
@@ -1283,6 +1283,30 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             ['l', 'i', 'n', 'n', 'n', 'n', 'b', 'r'],
             Object.keys(rekap).sort((a, c) => a.localeCompare(c, 'id')).map(k => { const r = rekap[k]; return [k, r.n, r.p, r.np, r.pm, r.p + r.np + r.pm, luasBata(r.p + r.np + r.pm), r.v]; }));
         };
+        const makeRekapNama = () => {
+          const g = {};
+          list.forEach(t => {
+            const nm = (t.nama || '').trim().replace(/\s+/g, ' ');
+            const k = nm.toLowerCase() || '(tanpa nama)';
+            const r = g[k] || (g[k] = { nama: nm || '(Tanpa Nama)', nik: '', n: 0, lp: 0, lt: 0, lm: 0, vp: 0, vt: 0, vm: 0 });
+            if (!r.nik && t.nik) r.nik = String(t.nik);
+            const l = Number(t.luas) || 0, v = nilaiTanah(t);
+            r.n++;
+            if (t.kelas === 'Produktif') { r.lp += l; r.vp += v; }
+            else if (t.kelas === 'Tidak Produktif') { r.lt += l; r.vt += v; }
+            else { r.lm += l; r.vm += v; }
+          });
+          const rows = Object.values(g).sort((a, b) => a.nama.localeCompare(b.nama, 'id')).map((r, i) => {
+            const tl = r.lp + r.lt + r.lm;
+            return [i + 1, r.nama, r.nik, r.n, r.lp, r.lt, r.lm, tl, luasBata(tl), r.vp, r.vt, r.vm, r.vp + r.vt + r.vm];
+          });
+          makeSheet('Rekap per Nama', 'REKAPITULASI LUAS DAN TAGIHAN PER NAMA',
+            ['No', 'Nama Pemilik / Penggarap', 'NIK', 'Jumlah Bidang', 'Luas Produktif (m²)', 'Luas Tidak Produktif (m²)', 'Luas Pemukiman (m²)', 'Total Luas (m²)', 'Total Bata', 'Tagihan Produktif (Rp)', 'Tagihan Tidak Produktif (Rp)', 'Tagihan Pemukiman (Rp)', 'TOTAL TAGIHAN (Rp)'],
+            [5, 24, 18, 8, 11, 12, 11, 11, 9, 14, 14, 14, 16],
+            ['c', 'l', 't', 'i', 'n', 'n', 'n', 'n', 'b', 'r', 'r', 'r', 'r'],
+            rows, true);
+        };
+        makeRekapNama();
         makeRekap('blok', 'Rekap per Blok', 'Kampung / Blok');
         if (key === 'alamat') makeRekap('alamat', 'Rekap per Alamat', 'Alamat Tanah');
 
