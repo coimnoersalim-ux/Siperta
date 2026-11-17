@@ -91,7 +91,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
     <!-- Tab Navigasi Menu -->
     <div class="max-w-7xl mx-auto px-4 flex gap-6 text-sm font-bold text-teal-100/70 overflow-x-auto border-t border-teal-900/50">
       <button onclick="switchTab('tab-ringkasan')" id="nav-ringkasan" class="py-3 transition whitespace-nowrap hover:text-white">Ringkasan &amp; Analisis</button>
-      <button onclick="switchTab('tab-rekap')" id="nav-rekap" class="py-3 hover:text-white transition whitespace-nowrap">Rekap per Kampung/Blok</button>
+      <button onclick="switchTab('tab-rekap')" id="nav-rekap" class="py-3 hover:text-white transition whitespace-nowrap">Rekap per Blok</button>
       <button onclick="switchTab('tab-data')" id="nav-data" class="py-3 transition whitespace-nowrap flex items-center gap-2 hover:text-white">Data Bidang Tanah <span id="navTotalBadge" class="bg-emerald-500 text-white text-[10px] px-2.5 py-0.5 rounded-full shadow-inner font-black">0</span></button>
       <button onclick="switchTab('tab-import')" id="nav-import" class="py-3 transition whitespace-nowrap text-white border-b-[3px] border-emerald-400">Import, Export &amp; Cetak</button>
     </div>
@@ -221,7 +221,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             <div>
               <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                Perbandingan Luas per Blok / Kampung
+                Perbandingan Luas per Blok
               </h3>
               <p class="text-[10px] text-slate-500 mt-0.5">Akumulasi luas tanah untuk 5 blok terbesar</p>
             </div>
@@ -237,17 +237,17 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       </div>
     </div>
 
-    <!-- TAB 2: Rekap per Kampung / Blok -->
+    <!-- TAB 2: Rekap per Blok -->
     <div id="tab-rekap" class="hidden animate-in fade-in duration-300">
       <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-lg font-bold text-slate-800">Rekapitulasi Luas per Kampung / Blok</h2>
+          <h2 class="text-lg font-bold text-slate-800">Rekapitulasi Luas per Blok</h2>
         </div>
         <div class="overflow-x-auto border border-slate-200 rounded-lg">
           <table class="w-full text-xs text-left">
             <thead class="bg-slate-100 text-slate-700 font-bold uppercase border-b border-slate-200">
               <tr>
-                <th class="px-5 py-3">Kampung / Blok</th>
+                <th class="px-5 py-3">Blok</th>
                 <th class="px-5 py-3 text-center">Jumlah Bidang</th>
                 <th class="px-5 py-3 text-right text-emerald-700">Produktif (m²)</th>
                 <th class="px-5 py-3 text-right text-amber-700">Tdk Produktif (m²)</th>
@@ -283,10 +283,11 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           <input type="text" id="searchInput" oninput="renderTable()" placeholder="Cari Nama, NIK, Alamat..." class="border border-slate-300 rounded-lg px-3 py-2 text-xs w-full sm:w-48 focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
           
           <!-- Filter Blok -->
-          <select id="filterBlok" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua Blok / Kampung</option></select>
+          <select id="filterBlok" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua Blok</option></select>
           <select id="filterAlamat" onchange="currentPage = 1; renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua Alamat Tanah</option></select>
           <select id="filterRw" onchange="currentPage = 1; renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua RW</option></select>
           <select id="filterRt" onchange="currentPage = 1; renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua RT</option></select>
+          <select id="filterKampung" onchange="currentPage = 1; renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua Kampung</option></select>
           
           <!-- Filter Kelas -->
           <select id="filterKelas" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
@@ -327,8 +328,9 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
                 <th class="px-4 py-3.5 w-12 text-center">No</th>
                 <th class="px-4 py-3.5">Pemilik / Penggarap</th>
                 <th class="px-4 py-3.5">NIK</th>
-                <th class="px-4 py-3.5">Kampung / Blok</th>
+                <th class="px-4 py-3.5">Blok</th>
                 <th class="px-4 py-3.5">Alamat Tanah</th>
+                <th class="px-4 py-3.5 text-center">RT / RW</th>
                 <th class="px-4 py-3.5 text-indigo-700">Status Kepemilikan</th>
                 <th class="px-4 py-3.5">Kelas Tanah</th>
                 <th class="px-4 py-3.5 text-right">Luas (m²)</th>
@@ -337,7 +339,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
                 <th class="px-4 py-3.5 text-center w-28">Aksi</th>
               </tr>
             </thead>
-            <tbody id="dataTableBody" class="divide-y divide-slate-100 text-slate-700"><tr><td colspan="11" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr></tbody>
+            <tbody id="dataTableBody" class="divide-y divide-slate-100 text-slate-700"><tr><td colspan="12" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr></tbody>
           </table>
         </div>
         
@@ -379,11 +381,12 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="importExcel(event)">
           
           <select id="exportMode" onchange="document.getElementById('exportBlokFilter').value='';refillScopeSelects()" class="border border-slate-300 rounded-lg px-3 py-2.5 text-xs font-bold text-slate-700 bg-white cursor-pointer">
-            <option value="blok">Berdasarkan Kampung / Blok</option>
             <option value="alamat">Berdasarkan Alamat Tanah</option>
+            <option value="blok">Berdasarkan Blok</option>
+            <option value="kampung">Berdasarkan Kampung</option>
             <option value="rtrw">Berdasarkan RT / RW</option>
           </select>
-          <select id="exportBlokFilter" class="border border-slate-300 rounded-lg px-3 py-2.5 text-xs font-bold text-slate-700 bg-white cursor-pointer"><option value="">Semua Kampung / Blok</option></select>
+          <select id="exportBlokFilter" class="border border-slate-300 rounded-lg px-3 py-2.5 text-xs font-bold text-slate-700 bg-white cursor-pointer"><option value="">Semua Alamat Tanah</option></select>
           <select id="exportOrientasi" class="border border-slate-300 rounded-lg px-3 py-2.5 text-xs font-bold text-slate-700 bg-white cursor-pointer">
             <option value="portrait">Kertas F4 - Potret</option>
             <option value="landscape" selected>Kertas F4 - Lanskap</option>
@@ -399,7 +402,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         <div class="max-w-xl">
           <h3 class="text-base font-bold text-blue-800 flex items-center gap-2">
             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-            Cetak Laporan F4 (per Kampung / Blok atau Alamat Tanah)
+            Cetak Laporan F4 (per Blok atau Alamat Tanah)
           </h3>
           <p class="text-xs text-slate-500 mt-2 leading-relaxed font-medium">
             Fitur khusus untuk mencetak rekap data bidang tanah berdasarkan lokasi/alamat tanah. <br>
@@ -408,12 +411,13 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         </div>
         <div class="flex flex-col gap-3 min-w-[200px]">
           <select id="printMode" onchange="document.getElementById('printBlokFilter').value='';refillScopeSelects()" class="border border-blue-300 rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-blue-500 shadow-sm font-bold text-slate-700 bg-white cursor-pointer">
-            <option value="blok">Berdasarkan Kampung / Blok</option>
             <option value="alamat">Berdasarkan Alamat Tanah</option>
+            <option value="blok">Berdasarkan Blok</option>
+            <option value="kampung">Berdasarkan Kampung</option>
             <option value="rtrw">Berdasarkan RT / RW</option>
           </select>
           <select id="printBlokFilter" class="border border-blue-300 rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-blue-500 shadow-sm font-bold text-slate-700 bg-white cursor-pointer">
-            <option value="">-- Pilih Kampung / Blok --</option>
+            <option value="">-- Pilih Alamat Tanah --</option>
           </select>
           <button onclick="printLaporanBlok()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-4 py-3 rounded-lg shadow transition text-center flex justify-center items-center gap-2">
             🖨 Cetak Laporan F4
@@ -462,7 +466,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
 
         <div class="grid grid-cols-2 gap-4">
           <div class="col-span-2 md:col-span-1">
-            <label class="block font-bold text-slate-700 mb-1.5">Kampung / Blok <span class="text-rose-500">*</span></label>
+            <label class="block font-bold text-slate-700 mb-1.5">Blok <span class="text-rose-500">*</span></label>
             <input type="text" id="inputBlok" required="" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Gunungsari 1">
           </div>
           <div class="col-span-2 md:col-span-1">
@@ -496,17 +500,18 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block font-bold text-slate-700 mb-1.5">RT</label>
-            <input type="text" id="inputRt" inputmode="numeric" maxlength="3" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: 02">
+            <input type="text" id="inputRt" oninput="updatePreviewAlamat()" inputmode="numeric" maxlength="3" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: 02">
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1.5">RW</label>
-            <input type="text" id="inputRw" inputmode="numeric" maxlength="3" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: 01">
+            <input type="text" id="inputRw" oninput="updatePreviewAlamat()" inputmode="numeric" maxlength="3" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: 01">
           </div>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1.5">Alamat Tanah <span class="font-medium text-slate-400">(Kampung / Dusun / Jalan, opsional)</span></label>
-          <input type="text" id="inputAlamat" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Kp. Cipancur">
+          <label class="block font-bold text-slate-700 mb-1.5">Kampung</label>
+          <input type="text" id="inputAlamat" oninput="updatePreviewAlamat()" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Kp. Cipancur">
+          <p class="text-[11px] text-slate-500 mt-1.5 font-medium">Alamat Tanah (otomatis): <b id="previewAlamat" class="text-slate-800">-</b></p>
         </div>
 
         <div class="flex justify-end gap-2 pt-4 mt-2 border-t border-slate-100">
@@ -821,6 +826,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const filterAlamat = (document.getElementById('filterAlamat') || {}).value || '';
       const filterRw = (document.getElementById('filterRw') || {}).value || '';
       const filterRt = (document.getElementById('filterRt') || {}).value || '';
+      const filterKampung = (document.getElementById('filterKampung') || {}).value || '';
 
       const filtered = tanahList.filter(item => {
         const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
@@ -828,8 +834,9 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         const matchKelas = !filterKelas || item.kelas === filterKelas;
         const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
         const matchAlamat = !filterAlamat || (item.alamat || '').trim() === filterAlamat;
-        const matchRtRw = (!filterRw || rwOf(item) === filterRw) && (!filterRt || rtOf(item) === filterRt);
-        return matchSearch && matchBlok && matchKelas && matchStatus && matchAlamat && matchRtRw;
+        const matchRtRw = (!filterRw || (filterRw === '__KOSONG__' ? (!rtOf(item) || !rwOf(item)) : rwOf(item) === filterRw)) && (!filterRt || rtOf(item) === filterRt);
+        const matchKampung = !filterKampung || kampungOf(item) === filterKampung;
+        return matchSearch && matchBlok && matchKelas && matchStatus && matchAlamat && matchRtRw && matchKampung;
       });
 
       const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
@@ -851,6 +858,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const filterAlamat = (document.getElementById('filterAlamat') || {}).value || '';
       const filterRw = (document.getElementById('filterRw') || {}).value || '';
       const filterRt = (document.getElementById('filterRt') || {}).value || '';
+      const filterKampung = (document.getElementById('filterKampung') || {}).value || '';
 
       const filtered = tanahList.filter(item => {
         const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
@@ -858,8 +866,9 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         const matchKelas = !filterKelas || item.kelas === filterKelas;
         const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
         const matchAlamat = !filterAlamat || (item.alamat || '').trim() === filterAlamat;
-        const matchRtRw = (!filterRw || rwOf(item) === filterRw) && (!filterRt || rtOf(item) === filterRt);
-        return matchSearch && matchBlok && matchKelas && matchStatus && matchAlamat && matchRtRw;
+        const matchRtRw = (!filterRw || (filterRw === '__KOSONG__' ? (!rtOf(item) || !rwOf(item)) : rwOf(item) === filterRw)) && (!filterRt || rtOf(item) === filterRt);
+        const matchKampung = !filterKampung || kampungOf(item) === filterKampung;
+        return matchSearch && matchBlok && matchKelas && matchStatus && matchAlamat && matchRtRw && matchKampung;
       });
 
       const totalItems = filtered.length;
@@ -873,7 +882,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       tbody.innerHTML = '';
 
       if (currentItems.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="11" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr>`;
       } else {
         currentItems.forEach((item, index) => {
           const tr = document.createElement('tr');
@@ -890,6 +899,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             <td class="px-4 py-3 font-mono text-slate-500 font-medium">${esc(item.nik) || '<span class="text-slate-300 italic">-</span>'}</td>
             <td class="px-4 py-3 font-bold text-slate-700">${esc(item.blok) || '-'}</td>
             <td class="px-4 py-3 text-slate-500 max-w-[150px] truncate font-medium" title="${esc(item.alamat)}">${esc(item.alamat) || '-'}</td>
+            <td class="px-4 py-3 text-center">${rtrwBadge(item)}</td>
             <td class="px-4 py-3 font-bold text-blue-800 text-[11px]">${esc(statusTampil)}</td>
             <td class="px-4 py-3"><span class="inline-block px-2.5 py-1 rounded text-[10px] font-extrabold border ${badgeColor}">${esc(item.kelas)}</span></td>
             <td class="px-4 py-3 text-right font-black text-emerald-800 text-sm">${formatAngka(item.luas)}</td>
@@ -954,8 +964,8 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       
       const bloks = Array.from(new Set(tanahList.map(t => t.blok).filter(Boolean))).sort();
       
-      let optHtml = '<option value="">Semua Blok / Kampung</option>';
-      let printOptHtml = '<option value="">-- Pilih Kampung / Blok --</option><option value="__ALL__">★ Semua Data</option>';
+      let optHtml = '<option value="">Semua Blok</option>';
+      let printOptHtml = '<option value="">-- Pilih Blok --</option><option value="__ALL__">★ Semua Data</option>';
       
       bloks.forEach(b => {
         optHtml += `<option value="${esc(b)}">${esc(b)}</option>`;
@@ -973,12 +983,12 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         aSel.innerHTML = '<option value="">Semua Alamat Tanah</option>' + alamats.map(a => `<option value="${esc(a)}">${esc(a)}</option>`).join('');
         aSel.value = aCur;
       }
-      [['filterRw', 'RW', rwOf], ['filterRt', 'RT', rtOf]].forEach(([id, lbl, fn]) => {
+      [['filterRw', 'RW', rwOf], ['filterRt', 'RT', rtOf], ['filterKampung', 'Kampung', kampungOf]].forEach(([id, lbl, fn]) => {
         const el = document.getElementById(id);
         if (!el) return;
         const cur = el.value;
         const vals = Array.from(new Set(tanahList.map(t => fn(t)).filter(Boolean))).sort((a, b) => a.localeCompare(b, 'id', { numeric: true }));
-        el.innerHTML = `<option value="">Semua ${lbl}</option>` + vals.map(v => `<option value="${esc(v)}">${lbl} ${esc(v)}</option>`).join('');
+        el.innerHTML = `<option value="">Semua ${lbl}</option>${id === 'filterRw' ? '<option value="__KOSONG__">⚠ RT/RW belum diisi</option>' : ''}` + vals.map(v => `<option value="${esc(v)}">${lbl === 'Kampung' ? '' : lbl + ' '}${esc(v)}</option>`).join('');
         el.value = cur;
       });
       
@@ -990,7 +1000,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
 
     function printLaporanBlok(forced) {
       const val = forced || document.getElementById('printBlokFilter').value;
-      if (!val) return alert('Pilih Kampung / Blok atau Alamat yang ingin dicetak terlebih dahulu!');
+      if (!val) return alert('Pilih Blok atau Alamat yang ingin dicetak terlebih dahulu!');
       const all = val === '__ALL__';
       const key = document.getElementById('printMode').value;
       const filtered = sortedList(tanahList.filter(t => all || String(fieldVal(t, key)).trim() === val), key);
@@ -999,7 +1009,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       document.getElementById('printBlokTitle').innerText = all ? 'SELURUH DATA' : `${scopeLabel(key)}: ${val.toUpperCase()}`;
       const td = 'border: 1px solid black; padding: 4px 5px;';
       const th = 'border: 1px solid black; padding: 5px; background: #e5e5e5; text-align: ';
-      const head = `<thead><tr><th style="${th}center; width: 28px;">No</th><th style="${th}left;">Nama Pemilik / Penggarap</th><th style="${th}left;">NIK</th><th style="${th}left;">Kampung / Blok</th><th style="${th}center;">RT / RW</th><th style="${th}left;">Alamat Tanah</th><th style="${th}left;">Status Kepemilikan</th><th style="${th}left;">Kelas Tanah</th><th style="${th}right;">Luas (m²)</th><th style="${th}right;">Luas (Bata)</th><th style="${th}right;">Nilai (Rp)</th></tr></thead>`;
+      const head = `<thead><tr><th style="${th}center; width: 28px;">No</th><th style="${th}left;">Nama Pemilik / Penggarap</th><th style="${th}left;">NIK</th><th style="${th}left;">Blok</th><th style="${th}left;">Kampung</th><th style="${th}left;">Alamat Tanah</th><th style="${th}left;">Status Kepemilikan</th><th style="${th}left;">Kelas Tanah</th><th style="${th}right;">Luas (m²)</th><th style="${th}right;">Luas (Bata)</th><th style="${th}right;">Nilai (Rp)</th></tr></thead>`;
       const sumRow = (label, v, nl) => `<tr><td colspan="8" style="${td} text-align: right; font-weight: bold;">${label}</td><td style="${td} text-align: right; font-weight: bold;">${formatAngka(v)}</td><td style="${td} text-align: right; font-weight: bold;">${bataFmt(v)}</td><td style="${td} text-align: right; font-weight: bold;">${rupiah(nl)}</td></tr>`;
       const chunks = [];
       for (let pos = 0; pos < filtered.length; pos += chunks.length === 1 ? 22 : 28) {
@@ -1012,7 +1022,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         let sub = 0, subN = 0;
         const rows = ch.map(it => {
           no++; sub += Number(it.luas) || 0; subN += nilaiTanah(it);
-          return `<tr><td style="${td} text-align: center;">${no}</td><td style="${td}">${esc(it.nama)}</td><td style="${td}">${esc(it.nik) || '-'}</td><td style="${td}">${esc(it.blok) || '-'}</td><td style="${td} text-align: center;">${esc(rtrwShort(it))}</td><td style="${td}">${esc(it.alamat) || '-'}</td><td style="${td}">${esc(it.status) || '-'}</td><td style="${td}">${esc(it.kelas) || '-'}</td><td style="${td} text-align: right;">${formatAngka(it.luas)}</td><td style="${td} text-align: right;">${bataFmt(it.luas)}</td><td style="${td} text-align: right;">${rupiah(nilaiTanah(it))}</td></tr>`;
+          return `<tr><td style="${td} text-align: center;">${no}</td><td style="${td}">${esc(it.nama)}</td><td style="${td}">${esc(it.nik) || '-'}</td><td style="${td}">${esc(it.blok) || '-'}</td><td style="${td}">${esc(kampungOf(it)) || '-'}</td><td style="${td}">${esc(it.alamat) || '-'}</td><td style="${td}">${esc(it.status) || '-'}</td><td style="${td}">${esc(it.kelas) || '-'}</td><td style="${td} text-align: right;">${formatAngka(it.luas)}</td><td style="${td} text-align: right;">${bataFmt(it.luas)}</td><td style="${td} text-align: right;">${rupiah(nilaiTanah(it))}</td></tr>`;
         }).join('');
         grand += sub; grandN += subN;
         const last = ci === chunks.length - 1;
@@ -1026,7 +1036,12 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       window.print();
     }
 
+    function updatePreviewAlamat() {
+      const v = id => document.getElementById(id).value;
+      document.getElementById('previewAlamat').innerText = composeAlamat(padRt(v('inputRt')), padRt(v('inputRw')), v('inputAlamat').trim()) || '-';
+    }
     function openModal(isEdit = false) {
+      updatePreviewAlamat();
       document.getElementById('recordModal').classList.remove('hidden');
       setTimeout(() => document.getElementById('modalContent').classList.remove('scale-95'), 10);
       document.getElementById('modalTitle').innerText = isEdit ? 'Edit Data Bidang' : 'Tambah Bidang Baru';
@@ -1059,7 +1074,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       submitBtn.disabled = true;
 
       let action = 'add';
-      let payload = { nama, nik, blok, luas, alamat, rt, rw, kelas, status };
+      let payload = { nama, nik, blok, luas, alamat, rt, rw, kampung: document.getElementById('inputAlamat').value.trim(), kelas, status };
 
       if (id) {
         action = 'edit';
@@ -1099,7 +1114,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       document.getElementById('inputLuas').value = target.luas;
       document.getElementById('inputRt').value = rtOf(target);
       document.getElementById('inputRw').value = rwOf(target);
-      document.getElementById('inputAlamat').value = detailAlamat(target.alamat);
+      document.getElementById('inputAlamat').value = kampungOf(target);
       document.getElementById('inputKelas').value = target.kelas;
       document.getElementById('inputStatus').value = target.status || 'Tanah Milik (Pribadi)';
       openModal(true);
@@ -1148,7 +1163,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             rows[hIdx].forEach((c, i) => {
               const k = norm(c);
               if (k.startsWith('nama')) col.nama = i; else if (k === 'nik') col.nik = i;
-              else if (k.startsWith('kampung')) col.blok = i; else if (k.startsWith('alamat')) col.alamat = i; else if (k === 'rt') col.rt = i; else if (k === 'rw') col.rw = i;
+              else if (k === 'kampung') col.kampung = i; else if (k.startsWith('kampung') || k === 'blok') col.blok = i; else if (k.startsWith('alamat')) col.alamat = i; else if (k === 'rt') col.rt = i; else if (k === 'rw') col.rw = i;
               else if (k.startsWith('status')) col.status = i; else if (k.startsWith('kelas')) col.kelas = i;
               else if (k.startsWith('luas')) col.luas = i;
             });
@@ -1167,7 +1182,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
               id: new Date().getTime() + i, nama: nama, luas: luas,
               nik: get(r, 'nik').replace(/\D/g, ''),
               blok: get(r, 'blok') || 'Gunungsari (Import)',
-              alamat: composeAlamat(padRt(get(r, 'rt')) || parseRtRw(get(r, 'alamat')).rt, padRt(get(r, 'rw')) || parseRtRw(get(r, 'alamat')).rw, detailAlamat(get(r, 'alamat'))) || '-',
+              alamat: composeAlamat(padRt(get(r, 'rt')) || parseRtRw(get(r, 'alamat')).rt, padRt(get(r, 'rw')) || parseRtRw(get(r, 'alamat')).rw, get(r, 'kampung') || detailAlamat(get(r, 'alamat'))) || '-',
               status: get(r, 'status') || 'Tanah Milik (Pribadi)',
               kelas: kelasOk.includes(kelasIn) ? kelasIn : (luas > 1000 ? 'Produktif' : (luas < 300 ? 'Pemukiman' : 'Tidak Produktif'))
             });
@@ -1307,10 +1322,10 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         };
 
         makeSheet('Data Tanah', 'DATA KEPEMILIKAN TANAH',
-          ['No', 'Nama Pemilik / Penggarap', 'NIK', 'Kampung / Blok', 'RT / RW', 'Alamat Tanah', 'Status Kepemilikan', 'Kelas Tanah', 'Luas (m²)', 'Luas (Bata)', 'Nilai (Rp)'],
-          [5, 24, 18, 15, 9, 20, 17, 13, 10, 10, 15],
-          ['c', 'l', 't', 'l', 'c', 'l', 'l', 'l', 'n', 'b', 'r'],
-          list.map((t, i) => [i + 1, t.nama || '', String(t.nik || ''), t.blok || '', rtrwShort(t), t.alamat || '', t.status || 'Tanah Milik (Pribadi)', t.kelas || '', Number(t.luas) || 0, luasBata(t.luas), nilaiTanah(t)]), true);
+          ['No', 'Nama Pemilik / Penggarap', 'NIK', 'Blok', 'Kampung', 'Alamat Tanah (Kampung, RT / RW)', 'Status Kepemilikan', 'Kelas Tanah', 'Luas (m²)', 'Luas (Bata)', 'Nilai (Rp)'],
+          [5, 24, 18, 12, 16, 26, 17, 13, 10, 10, 15],
+          ['c', 'l', 't', 'l', 'l', 'l', 'l', 'l', 'n', 'b', 'r'],
+          list.map((t, i) => [i + 1, t.nama || '', String(t.nik || ''), t.blok || '', kampungOf(t), t.alamat || '', t.status || 'Tanah Milik (Pribadi)', t.kelas || '', Number(t.luas) || 0, luasBata(t.luas), nilaiTanah(t)]), true);
 
         const makeRekap = (gk, sheetName, label) => {
           const rekap = {};
@@ -1351,8 +1366,9 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             rows, true);
         };
         makeRekapNama();
-        makeRekap('blok', 'Rekap per Blok', 'Kampung / Blok');
-        if (key === 'alamat') makeRekap('alamat', 'Rekap per Alamat', 'Alamat Tanah');
+        makeRekap('alamat', 'Rekap per Alamat', 'Alamat Tanah');
+        makeRekap('blok', 'Rekap per Blok', 'Blok');
+        if (key === 'kampung') makeRekap('kampung', 'Rekap per Kampung', 'Kampung');
         if (key === 'rtrw') makeRekap('rtrw', 'Rekap per RT-RW', 'RT / RW');
 
         const buf = await wb.xlsx.writeBuffer();
@@ -1419,15 +1435,23 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
     }
     function composeAlamat(rt, rw, detail) {
       const base = [rt ? 'RT ' + rt : '', rw ? 'RW ' + rw : ''].filter(Boolean).join(' / ');
-      return [base, detail].filter(Boolean).join(', ');
+      return [detail, base].filter(Boolean).join(', ');
     }
+    function kampungOf(t) { return String(t.kampung || '').trim() || detailAlamat(t.alamat); }
     function rtrwLabel(t) {
       const rt = rtOf(t), rw = rwOf(t);
       return rt && rw ? `RT ${rt} / RW ${rw}` : (rt ? `RT ${rt}` : (rw ? `RW ${rw}` : ''));
     }
+    function rtrwBadge(t) {
+      const rt = rtOf(t), rw = rwOf(t);
+      const base = 'px-2 py-1 rounded-md text-[10px] font-bold border whitespace-nowrap';
+      if (rt && rw) return `<span class="${base} bg-sky-50 text-sky-700 border-sky-200">RT ${esc(rt)} / RW ${esc(rw)}</span>`;
+      if (rt || rw) return `<span class="${base} bg-amber-50 text-amber-700 border-amber-300">RT ${esc(rt) || '?'} / RW ${esc(rw) || '?'}</span>`;
+      return `<span class="${base} bg-rose-50 text-rose-600 border-rose-200">Belum diisi</span>`;
+    }
     function rtrwShort(t) { const rt = rtOf(t), rw = rwOf(t); return rt && rw ? `${rt} / ${rw}` : (rt || rw || '-'); }
-    function fieldVal(t, key) { return key === 'rtrw' ? rtrwLabel(t) : (t[key] || ''); }
-    function scopeLabel(key) { return { alamat: 'ALAMAT TANAH', rtrw: 'RT / RW', blok: 'KAMPUNG / BLOK' }[key] || 'KAMPUNG / BLOK'; }
+    function fieldVal(t, key) { return key === 'rtrw' ? rtrwLabel(t) : (key === 'kampung' ? kampungOf(t) : (t[key] || '')); }
+    function scopeLabel(key) { return { alamat: 'ALAMAT TANAH', rtrw: 'RT / RW', kampung: 'KAMPUNG', blok: 'BLOK' }[key] || 'BLOK'; }
     const HARGA_KEY = 'siperta_harga_bata_v1';
     let hargaCfg = { bata: 14, 'Produktif': 0, 'Tidak Produktif': 0, 'Pemukiman': 0 };
     function loadHarga() {
@@ -1460,7 +1484,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         const mode = document.getElementById(m), sel = document.getElementById(sId);
         if (!mode || !sel) return;
         const key = mode.value, cur = sel.value;
-        const label = { alamat: 'Alamat Tanah', rtrw: 'RT / RW', blok: 'Kampung / Blok' }[key] || 'Kampung / Blok';
+        const label = { alamat: 'Alamat Tanah', rtrw: 'RT / RW', kampung: 'Kampung', blok: 'Blok' }[key] || 'Blok';
         const vals = Array.from(new Set(tanahList.map(t => String(fieldVal(t, key)).trim()).filter(v => v && v !== '-'))).sort((a, b) => a.localeCompare(b, 'id'));
         let h = isPrint ? `<option value="">-- Pilih ${label} --</option><option value="__ALL__">★ Semua Data</option>` : `<option value="">Semua ${label}</option>`;
         vals.forEach(v => { h += `<option value="${esc(v)}">${esc(v)}</option>`; });
