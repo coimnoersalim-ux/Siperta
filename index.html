@@ -331,6 +331,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
                 <th class="px-4 py-3.5">Blok</th>
                 <th class="px-4 py-3.5">Alamat Tanah</th>
                 <th class="px-4 py-3.5 text-center">RT / RW</th>
+                <th class="px-4 py-3.5">Alamat Penggarap</th>
                 <th class="px-4 py-3.5 text-indigo-700">Status Kepemilikan</th>
                 <th class="px-4 py-3.5">Kelas Tanah</th>
                 <th class="px-4 py-3.5 text-right">Luas (m²)</th>
@@ -339,7 +340,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
                 <th class="px-4 py-3.5 text-center w-28">Aksi</th>
               </tr>
             </thead>
-            <tbody id="dataTableBody" class="divide-y divide-slate-100 text-slate-700"><tr><td colspan="12" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr></tbody>
+            <tbody id="dataTableBody" class="divide-y divide-slate-100 text-slate-700"><tr><td colspan="13" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr></tbody>
           </table>
         </div>
         
@@ -514,6 +515,11 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           <p class="text-[11px] text-slate-500 mt-1.5 font-medium">Alamat Tanah (otomatis): <b id="previewAlamat" class="text-slate-800">-</b></p>
         </div>
 
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">Alamat Penggarap <span class="font-medium text-slate-400">(tempat tinggal, isi jika berbeda dengan alamat tanah)</span></label>
+          <input type="text" id="inputAlamatPenggarap" class="w-full border-2 border-slate-200 rounded-lg p-2.5 focus:border-emerald-500 focus:ring-0 outline-none transition font-medium text-slate-800" placeholder="Contoh: Kp. Sukamaju RT 03 / RW 02, Desa Lain">
+        </div>
+
         <div class="flex justify-end gap-2 pt-4 mt-2 border-t border-slate-100">
           <button type="button" onclick="closeModal()" class="px-5 py-2.5 text-slate-500 font-bold hover:bg-slate-100 rounded-lg transition border border-slate-200">Batal</button>
           <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md transition">Simpan Data</button>
@@ -585,7 +591,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         const data = await response.json();
         
         if(data && Array.isArray(data)) {
-           tanahList = data;
+           tanahList = normalizeList(data);
            localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList)); 
            renderAll();
         }
@@ -603,7 +609,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const savedData = localStorage.getItem(STORAGE_KEY);
       if (savedData) {
         try { 
-          tanahList = JSON.parse(savedData); 
+          tanahList = normalizeList(JSON.parse(savedData)); 
           renderAll(); // Langsung tampilkan data lokal
         } catch(err) { 
           tanahList = []; 
@@ -619,7 +625,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         
         if(data && Array.isArray(data) && data.length > 0) {
            // Update data hanya jika server mengembalikan data valid (bukan array kosong karena error)
-           tanahList = data;
+           tanahList = normalizeList(data);
            localStorage.setItem(STORAGE_KEY, JSON.stringify(tanahList)); 
            renderAll(); // Render ulang dengan data segar dari server
         }
@@ -651,7 +657,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         await fetch(SCRIPT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'sync_all', data: tanahList })
+          body: JSON.stringify({ action: 'sync_all', data: tanahList.map(cloudItem) })
         });
       } catch(e) {
         console.error('Gagal menyimpan ke Database Cloud', e);
@@ -829,7 +835,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const filterKampung = (document.getElementById('filterKampung') || {}).value || '';
 
       const filtered = tanahList.filter(item => {
-        const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
+        const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search) || (item.alamatPenggarap || '').toLowerCase().includes(search);
         const matchBlok = !filterBlok || item.blok === filterBlok;
         const matchKelas = !filterKelas || item.kelas === filterKelas;
         const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
@@ -861,7 +867,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const filterKampung = (document.getElementById('filterKampung') || {}).value || '';
 
       const filtered = tanahList.filter(item => {
-        const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search);
+        const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search) || (item.alamatPenggarap || '').toLowerCase().includes(search);
         const matchBlok = !filterBlok || item.blok === filterBlok;
         const matchKelas = !filterKelas || item.kelas === filterKelas;
         const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
@@ -882,7 +888,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       tbody.innerHTML = '';
 
       if (currentItems.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="12" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="13" class="text-center py-12 font-bold text-slate-400 text-sm">Data bidang tanah kosong.</td></tr>`;
       } else {
         currentItems.forEach((item, index) => {
           const tr = document.createElement('tr');
@@ -900,6 +906,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             <td class="px-4 py-3 font-bold text-slate-700">${esc(item.blok) || '-'}</td>
             <td class="px-4 py-3 text-slate-500 max-w-[150px] truncate font-medium" title="${esc(item.alamat)}">${esc(item.alamat) || '-'}</td>
             <td class="px-4 py-3 text-center">${rtrwBadge(item)}</td>
+            <td class="px-4 py-3 text-xs text-slate-600 max-w-[200px] truncate" title="${esc(item.alamatPenggarap)}">${esc(item.alamatPenggarap) || '<span class="text-slate-300 italic">-</span>'}</td>
             <td class="px-4 py-3 font-bold text-blue-800 text-[11px]">${esc(statusTampil)}</td>
             <td class="px-4 py-3"><span class="inline-block px-2.5 py-1 rounded text-[10px] font-extrabold border ${badgeColor}">${esc(item.kelas)}</span></td>
             <td class="px-4 py-3 text-right font-black text-emerald-800 text-sm">${formatAngka(item.luas)}</td>
@@ -1009,7 +1016,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       document.getElementById('printBlokTitle').innerText = all ? 'SELURUH DATA' : `${scopeLabel(key)}: ${val.toUpperCase()}`;
       const td = 'border: 1px solid black; padding: 4px 5px;';
       const th = 'border: 1px solid black; padding: 5px; background: #e5e5e5; text-align: ';
-      const head = `<thead><tr><th style="${th}center; width: 28px;">No</th><th style="${th}left;">Nama Pemilik / Penggarap</th><th style="${th}left;">NIK</th><th style="${th}left;">Blok</th><th style="${th}left;">Kampung</th><th style="${th}left;">Alamat Tanah</th><th style="${th}left;">Status Kepemilikan</th><th style="${th}left;">Kelas Tanah</th><th style="${th}right;">Luas (m²)</th><th style="${th}right;">Luas (Bata)</th><th style="${th}right;">Nilai (Rp)</th></tr></thead>`;
+      const head = `<thead><tr><th style="${th}center; width: 28px;">No</th><th style="${th}left;">Nama Pemilik / Penggarap</th><th style="${th}left;">NIK</th><th style="${th}left;">Blok</th><th style="${th}left;">Alamat Tanah</th><th style="${th}left;">Alamat Penggarap</th><th style="${th}left;">Status Kepemilikan</th><th style="${th}left;">Kelas Tanah</th><th style="${th}right;">Luas (m²)</th><th style="${th}right;">Luas (Bata)</th><th style="${th}right;">Nilai (Rp)</th></tr></thead>`;
       const sumRow = (label, v, nl) => `<tr><td colspan="8" style="${td} text-align: right; font-weight: bold;">${label}</td><td style="${td} text-align: right; font-weight: bold;">${formatAngka(v)}</td><td style="${td} text-align: right; font-weight: bold;">${bataFmt(v)}</td><td style="${td} text-align: right; font-weight: bold;">${rupiah(nl)}</td></tr>`;
       const chunks = [];
       for (let pos = 0; pos < filtered.length; pos += chunks.length === 1 ? 22 : 28) {
@@ -1022,7 +1029,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         let sub = 0, subN = 0;
         const rows = ch.map(it => {
           no++; sub += Number(it.luas) || 0; subN += nilaiTanah(it);
-          return `<tr><td style="${td} text-align: center;">${no}</td><td style="${td}">${esc(it.nama)}</td><td style="${td}">${esc(it.nik) || '-'}</td><td style="${td}">${esc(it.blok) || '-'}</td><td style="${td}">${esc(kampungOf(it)) || '-'}</td><td style="${td}">${esc(it.alamat) || '-'}</td><td style="${td}">${esc(it.status) || '-'}</td><td style="${td}">${esc(it.kelas) || '-'}</td><td style="${td} text-align: right;">${formatAngka(it.luas)}</td><td style="${td} text-align: right;">${bataFmt(it.luas)}</td><td style="${td} text-align: right;">${rupiah(nilaiTanah(it))}</td></tr>`;
+          return `<tr><td style="${td} text-align: center;">${no}</td><td style="${td}">${esc(it.nama)}</td><td style="${td}">${esc(it.nik) || '-'}</td><td style="${td}">${esc(it.blok) || '-'}</td><td style="${td}">${esc(it.alamat) || '-'}</td><td style="${td}">${esc(it.alamatPenggarap) || '-'}</td><td style="${td}">${esc(it.status) || '-'}</td><td style="${td}">${esc(it.kelas) || '-'}</td><td style="${td} text-align: right;">${formatAngka(it.luas)}</td><td style="${td} text-align: right;">${bataFmt(it.luas)}</td><td style="${td} text-align: right;">${rupiah(nilaiTanah(it))}</td></tr>`;
         }).join('');
         grand += sub; grandN += subN;
         const last = ci === chunks.length - 1;
@@ -1065,6 +1072,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const luas = parseFloat(document.getElementById('inputLuas').value) || 0;
       const rt = padRt(document.getElementById('inputRt').value), rw = padRt(document.getElementById('inputRw').value);
       const alamat = composeAlamat(rt, rw, document.getElementById('inputAlamat').value.trim());
+      const alamatPenggarap = document.getElementById('inputAlamatPenggarap').value.trim();
       const kelas = document.getElementById('inputKelas').value;
       const status = document.getElementById('inputStatus').value;
       
@@ -1074,7 +1082,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       submitBtn.disabled = true;
 
       let action = 'add';
-      let payload = { nama, nik, blok, luas, alamat, rt, rw, kampung: document.getElementById('inputAlamat').value.trim(), kelas, status };
+      let payload = { nama, nik, blok, luas, alamat, rt, rw, kampung: document.getElementById('inputAlamat').value.trim(), alamatPenggarap, kelas, status };
 
       if (id) {
         action = 'edit';
@@ -1094,7 +1102,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         await fetch(SCRIPT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: action, data: payload })
+          body: JSON.stringify({ action: action, data: cloudItem(payload) })
         });
       } catch(err) {
         console.error('Gagal sinkron ke Sheet:', err);
@@ -1115,6 +1123,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       document.getElementById('inputRt').value = rtOf(target);
       document.getElementById('inputRw').value = rwOf(target);
       document.getElementById('inputAlamat').value = kampungOf(target);
+      document.getElementById('inputAlamatPenggarap').value = target.alamatPenggarap || '';
       document.getElementById('inputKelas').value = target.kelas;
       document.getElementById('inputStatus').value = target.status || 'Tanah Milik (Pribadi)';
       openModal(true);
@@ -1163,7 +1172,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             rows[hIdx].forEach((c, i) => {
               const k = norm(c);
               if (k.startsWith('nama')) col.nama = i; else if (k === 'nik') col.nik = i;
-              else if (k === 'kampung') col.kampung = i; else if (k.startsWith('kampung') || k === 'blok') col.blok = i; else if (k.startsWith('alamat')) col.alamat = i; else if (k === 'rt') col.rt = i; else if (k === 'rw') col.rw = i;
+              else if (k === 'kampung') col.kampung = i; else if (k.startsWith('kampung') || k === 'blok') col.blok = i; else if (k.startsWith('alamat') && k.includes('penggarap')) col.alamatPenggarap = i; else if (k.startsWith('alamat')) col.alamat = i; else if (k === 'rt') col.rt = i; else if (k === 'rw') col.rw = i;
               else if (k.startsWith('status')) col.status = i; else if (k.startsWith('kelas')) col.kelas = i;
               else if (k.startsWith('luas')) col.luas = i;
             });
@@ -1184,6 +1193,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
               blok: get(r, 'blok') || 'Gunungsari (Import)',
               alamat: composeAlamat(padRt(get(r, 'rt')) || parseRtRw(get(r, 'alamat')).rt, padRt(get(r, 'rw')) || parseRtRw(get(r, 'alamat')).rw, get(r, 'kampung') || detailAlamat(get(r, 'alamat'))) || '-',
               status: get(r, 'status') || 'Tanah Milik (Pribadi)',
+              alamatPenggarap: get(r, 'alamatPenggarap').replace(/^-$/, ''),
               kelas: kelasOk.includes(kelasIn) ? kelasIn : (luas > 1000 ? 'Produktif' : (luas < 300 ? 'Pemukiman' : 'Tidak Produktif'))
             });
             importedCount++;
@@ -1322,10 +1332,10 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         };
 
         makeSheet('Data Tanah', 'DATA KEPEMILIKAN TANAH',
-          ['No', 'Nama Pemilik / Penggarap', 'NIK', 'Blok', 'Kampung', 'Alamat Tanah (Kampung, RT / RW)', 'Status Kepemilikan', 'Kelas Tanah', 'Luas (m²)', 'Luas (Bata)', 'Nilai (Rp)'],
-          [5, 24, 18, 12, 16, 26, 17, 13, 10, 10, 15],
+          ['No', 'Nama Pemilik / Penggarap', 'NIK', 'Blok', 'Alamat Tanah (Kampung, RT / RW)', 'Alamat Penggarap (Tempat Tinggal)', 'Status Kepemilikan', 'Kelas Tanah', 'Luas (m²)', 'Luas (Bata)', 'Nilai (Rp)'],
+          [5, 24, 18, 12, 26, 26, 17, 13, 10, 10, 15],
           ['c', 'l', 't', 'l', 'l', 'l', 'l', 'l', 'n', 'b', 'r'],
-          list.map((t, i) => [i + 1, t.nama || '', String(t.nik || ''), t.blok || '', kampungOf(t), t.alamat || '', t.status || 'Tanah Milik (Pribadi)', t.kelas || '', Number(t.luas) || 0, luasBata(t.luas), nilaiTanah(t)]), true);
+          list.map((t, i) => [i + 1, t.nama || '', String(t.nik || ''), t.blok || '', t.alamat || '', t.alamatPenggarap || '-', t.status || 'Tanah Milik (Pribadi)', t.kelas || '', Number(t.luas) || 0, luasBata(t.luas), nilaiTanah(t)]), true);
 
         const makeRekap = (gk, sheetName, label) => {
           const rekap = {};
@@ -1347,8 +1357,9 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           list.forEach(t => {
             const nm = (t.nama || '').trim().replace(/\s+/g, ' ');
             const k = nm.toLowerCase() || '(tanpa nama)';
-            const r = g[k] || (g[k] = { nama: nm || '(Tanpa Nama)', nik: '', n: 0, lp: 0, lt: 0, lm: 0, vp: 0, vt: 0, vm: 0 });
+            const r = g[k] || (g[k] = { nama: nm || '(Tanpa Nama)', nik: '', ap: '', n: 0, lp: 0, lt: 0, lm: 0, vp: 0, vt: 0, vm: 0 });
             if (!r.nik && t.nik) r.nik = String(t.nik);
+            if (!r.ap && t.alamatPenggarap) r.ap = t.alamatPenggarap;
             const l = Number(t.luas) || 0, v = nilaiTanah(t);
             r.n++;
             if (t.kelas === 'Produktif') { r.lp += l; r.vp += v; }
@@ -1357,12 +1368,12 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           });
           const rows = Object.values(g).sort((a, b) => a.nama.localeCompare(b.nama, 'id')).map((r, i) => {
             const tl = r.lp + r.lt + r.lm;
-            return [i + 1, r.nama, r.nik, r.n, r.lp, r.lt, r.lm, tl, luasBata(tl), r.vp, r.vt, r.vm, r.vp + r.vt + r.vm];
+            return [i + 1, r.nama, r.nik, r.ap || '-', r.n, r.lp, r.lt, r.lm, tl, luasBata(tl), r.vp, r.vt, r.vm, r.vp + r.vt + r.vm];
           });
           makeSheet('Rekap per Nama', 'REKAPITULASI LUAS DAN TAGIHAN PER NAMA',
-            ['No', 'Nama Pemilik / Penggarap', 'NIK', 'Jumlah Bidang', 'Luas Produktif (m²)', 'Luas Tidak Produktif (m²)', 'Luas Pemukiman (m²)', 'Total Luas (m²)', 'Total Bata', 'Tagihan Produktif (Rp)', 'Tagihan Tidak Produktif (Rp)', 'Tagihan Pemukiman (Rp)', 'TOTAL TAGIHAN (Rp)'],
-            [5, 24, 18, 8, 11, 12, 11, 11, 9, 14, 14, 14, 16],
-            ['c', 'l', 't', 'i', 'n', 'n', 'n', 'n', 'b', 'r', 'r', 'r', 'r'],
+            ['No', 'Nama Pemilik / Penggarap', 'NIK', 'Alamat Penggarap (Tempat Tinggal)', 'Jumlah Bidang', 'Luas Produktif (m²)', 'Luas Tidak Produktif (m²)', 'Luas Pemukiman (m²)', 'Total Luas (m²)', 'Total Bata', 'Tagihan Produktif (Rp)', 'Tagihan Tidak Produktif (Rp)', 'Tagihan Pemukiman (Rp)', 'TOTAL TAGIHAN (Rp)'],
+            [5, 24, 18, 26, 8, 11, 12, 11, 11, 9, 14, 14, 14, 16],
+            ['c', 'l', 't', 'l', 'i', 'n', 'n', 'n', 'n', 'b', 'r', 'r', 'r', 'r'],
             rows, true);
         };
         makeRekapNama();
@@ -1436,6 +1447,21 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
     function composeAlamat(rt, rw, detail) {
       const base = [rt ? 'RT ' + rt : '', rw ? 'RW ' + rw : ''].filter(Boolean).join(' / ');
       return [detail, base].filter(Boolean).join(', ');
+    }
+    const SEP_PENGGARAP = ' | Penggarap: ';
+    function cloudItem(t) {
+      const o = Object.assign({}, t);
+      if (o.alamatPenggarap) o.alamat = (o.alamat || '') + SEP_PENGGARAP + o.alamatPenggarap;
+      delete o.alamatPenggarap;
+      return o;
+    }
+    function normalizeList(list) {
+      return list.map(t => {
+        const a = String(t.alamat || '');
+        const i = a.search(/\s*\|\s*Penggarap:\s*/i);
+        if (i < 0) return t;
+        return Object.assign({}, t, { alamat: a.slice(0, i).trim(), alamatPenggarap: a.slice(i).replace(/^\s*\|\s*Penggarap:\s*/i, '').trim() });
+      });
     }
     function kampungOf(t) { return String(t.kampung || '').trim() || detailAlamat(t.alamat); }
     function rtrwLabel(t) {
