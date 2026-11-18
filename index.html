@@ -280,7 +280,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             </select>
           </div>
           
-          <input type="text" id="searchInput" oninput="renderTable()" placeholder="Cari Nama, NIK, Alamat..." class="border border-slate-300 rounded-lg px-3 py-2 text-xs w-full sm:w-48 focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
+          <input type="text" id="searchInput" oninput="currentPage = 1; renderTable()" placeholder="Cari Nama, NIK, Alamat, RT/RW..." class="border border-slate-300 rounded-lg px-3 py-2 text-xs w-full sm:w-48 focus:outline-none focus:border-emerald-500 shadow-sm font-medium">
           
           <!-- Filter Blok -->
           <select id="filterBlok" onchange="renderTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 shadow-sm font-medium"><option value="">Semua Blok</option></select>
@@ -835,7 +835,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const filterKampung = (document.getElementById('filterKampung') || {}).value || '';
 
       const filtered = tanahList.filter(item => {
-        const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search) || (item.alamatPenggarap || '').toLowerCase().includes(search);
+        const matchSearch = matchesSearch(item, search);
         const matchBlok = !filterBlok || item.blok === filterBlok;
         const matchKelas = !filterKelas || item.kelas === filterKelas;
         const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
@@ -867,7 +867,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       const filterKampung = (document.getElementById('filterKampung') || {}).value || '';
 
       const filtered = tanahList.filter(item => {
-        const matchSearch = (item.nama || '').toLowerCase().includes(search) || (item.nik || '').toLowerCase().includes(search) || (item.alamat || '').toLowerCase().includes(search) || (item.alamatPenggarap || '').toLowerCase().includes(search);
+        const matchSearch = matchesSearch(item, search);
         const matchBlok = !filterBlok || item.blok === filterBlok;
         const matchKelas = !filterKelas || item.kelas === filterKelas;
         const matchStatus = !filterStatus || (item.status || 'Tanah Milik (Pribadi)') === filterStatus;
@@ -1455,8 +1455,17 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
       delete o.alamatPenggarap;
       return o;
     }
+    function matchesSearch(item, q) {
+      if (!q) return true;
+      const str = v => String(v == null ? '' : v);
+      const hay = [item.nama, item.nik, item.blok, item.alamat, item.alamatPenggarap, kampungOf(item), rtrwLabel(item), item.status, item.kelas].map(str).join(' ').toLowerCase();
+      const nikDigits = str(item.nik).replace(/\D/g, '');
+      return q.split(/\s+/).every(w => hay.includes(w) || (/^\d+$/.test(w) && nikDigits.includes(w)));
+    }
     function normalizeList(list) {
-      return list.map(t => {
+      return list.map(t0 => {
+        const t = Object.assign({}, t0);
+        ['nama', 'nik', 'blok', 'alamat', 'kelas', 'status'].forEach(k => { if (t[k] != null && typeof t[k] !== 'string') t[k] = String(t[k]); });
         const a = String(t.alamat || '');
         const i = a.search(/\s*\|\s*Penggarap:\s*/i);
         if (i < 0) return t;
