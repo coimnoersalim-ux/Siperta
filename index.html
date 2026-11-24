@@ -1817,7 +1817,6 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
         grand += sub; grandN += subN;
         const last = ci === chunks.length - 1;
         let foot = '';
-        if (chunks.length > 1) foot += sumRow(`JUMLAH HALAMAN INI (Hal. ${ci + 1} dari ${chunks.length}) (m²)`, sub, subN);
         if (last) foot += sumRow('TOTAL LUAS KESELURUHAN (m²)', grand, grandN);
         return `<div style="${last ? 'margin-bottom: 30px;' : 'page-break-after: always;'}"><table style="width: 100%; border-collapse: collapse; font-size: 10px; color: black;">${head}<tbody>${rows}${foot}</tbody></table></div>`;
       }).join('');
@@ -2072,7 +2071,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
           const scale = Math.max(40, Math.min(100, Math.floor(printW / totalPt * 100) - 2));
           const capPt = (landscape ? 518 : 842) / (scale / 100) - 22;
           const sizes = paged ? [Math.floor((capPt - 165 - 40 - 20) / 18), Math.floor((capPt - 40 - 20) / 18)] : [Infinity, Infinity];
-          const multi = paged && rows.length > sizes[0] - 9;
+          const multi = false; // tanpa baris jumlah per halaman; hanya satu total di akhir
           const sumOf = (arr, i) => arr.reduce((a, r) => a + (Number(r[i]) || 0), 0);
           const subs = [];
           let pos = 0, ci = 0;
@@ -2093,7 +2092,7 @@ ate-800 min-h-screen flex flex-col font-sans antialiased">
             }
             ci++;
           }
-          const trow = addSumRow(multi ? 'TOTAL LUAS KESELURUHAN (m²)' : 'TOTAL',
+          const trow = addSumRow(paged ? 'TOTAL LUAS KESELURUHAN (m²)' : 'TOTAL',
             L => multi ? `SUM(${subs.map(r => L + r).join(',')})` : `SUM(${L}${HR + 1}:${L}${HR + rows.length})`,
             i => sumOf(rows, i));
           const sc = n - 2;
